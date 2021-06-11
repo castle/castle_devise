@@ -10,10 +10,9 @@ module CastleDevise
       end
 
       def castle_filter
-        response = castle.filter(
+        response = CastleDevise.sdk_facade.filter(
           event: "$registration",
-          request_token: params["castle_request_token"],
-          context: Castle::Context::Prepare.call(request)
+          rack_request: request
         )
 
         case response.dig(:policy, :action)

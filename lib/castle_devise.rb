@@ -18,11 +18,16 @@ module CastleDevise
       Castle.api_secret = configuration.api_secret
       Castle.config.logger = configuration.logger
     end
+
+    def sdk_facade
+      @sdk_facade ||= CastleDevise::SdkFacade.new(Castle::Client.new)
+    end
   end
 end
 
 require_relative "castle_devise/configuration"
 require_relative "castle_devise/patches"
+require_relative "castle_devise/sdk_facade"
 require_relative "castle_devise/controllers/helpers"
 require_relative "castle_devise/helpers/castle_helper"
 require_relative "castle_devise/hooks/castle_protectable"
