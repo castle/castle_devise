@@ -12,12 +12,12 @@ module CastleDevise
       def castle_filter
         response = CastleDevise.sdk_facade.filter(
           event: "$registration",
-          rack_request: request
+          rack_request: Rack::Request.new(request.env)
         )
 
         case response.dig(:policy, :action)
         when "deny"
-          flash[:error] = "Account cannot be created at this moment. Please try again later"
+          flash.alert = "Account cannot be created at this moment. Please try again later"
           redirect_to new_session_path(resource_name)
           false
         else

@@ -6,7 +6,6 @@ Warden::Manager.after_authentication do |resource, warden, opts|
   begin
     response = CastleDevise.sdk_facade.risk(
       event: "$login",
-      status: "$succeeded",
       resource: resource,
       rack_request: Rack::Request.new(warden.env)
     )
