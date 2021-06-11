@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "active_support/configurable"
+require "logger"
+
 module CastleDevise
   class Configuration
     include ActiveSupport::Configurable
@@ -7,6 +10,6 @@ module CastleDevise
     config_accessor(:api_secret)
     config_accessor(:app_id)
 
-    config_accessor(:logger) { Rails.logger }
+    config_accessor(:logger) { Logger.new($stdout) }
   end
 end

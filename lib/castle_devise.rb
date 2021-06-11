@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+require "devise"
+
 module CastleDevise
   class << self
-    delegate :logger, to: :configuration
-
     def configuration
       @configuration ||= Configuration.new
+    end
+
+    def logger
+      configuration.logger
     end
 
     def configure
