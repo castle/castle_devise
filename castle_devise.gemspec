@@ -4,7 +4,7 @@ require_relative "lib/castle_devise/version"
 
 Gem::Specification.new do |spec|
   spec.name = "castle_devise"
-  spec.version = Castle::Devise::VERSION
+  spec.version = CastleDevise::VERSION
   spec.license = "MIT"
   spec.summary = "Integrates Castle with Devise"
   spec.description = "castle_devise provides out-of-the-box protection against bot registrations and account takeover attacks."

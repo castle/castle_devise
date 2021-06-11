@@ -1,35 +1,63 @@
-# Castle::Devise
+# CastleDevice
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/castle/devise`. To experiment with that code, run `bin/console` for an interactive prompt.
+CastleDevise is a [Devise](https://github.com/heartcombo/devise) plugin that integrates [Castle](https://castle.io). 
 
-TODO: Delete this and the text above, and describe your gem
+It currently provides the following features:
+- preventing bots from registration attacks using Castle's [filter API](https://docs.castle.io/v1/reference/api-reference/#filter)
+- preventing ATO attacks using Castle's [Risk API](https://docs.castle.io/v1/reference/api-reference/#risk)
+
+If you want to learn about all capabilities of Castle, please take a look at [our documentation](https://docs.castle.io/).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Include `castle_devise` in your Gemfile:
 
 ```ruby
-gem 'castle-devise'
+gem 'castle_devise'
 ```
 
-And then execute:
+Create `config/initializers/castle_devise.rb` and fill in your API secret and APP_ID from the [Castle Dashboard](https://dashboard.castle.io/settings/general)
 
-    $ bundle install
+```ruby 
+CastleDevise.configure do |config|
+  config.api_secret = ENV.fetch('CASTLE_API_SECRET')
+  config.app_id = ENV.fetch('CASTLE_APP_ID')
+end
+```
 
-Or install it yourself as:
+Add `:castle_protectable` Devise module to your User model:
 
-    $ gem install castle-devise
+```ruby 
+class User < ApplicationRecord
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable, 
+         :castle_protectable # <--- add this
+end
+```
 
-## Usage
+#### Further steps if you're not using Webpacker
 
-TODO: Write usage instructions here
+Include Castle's c.js script in the head section of your layout:
 
-## Development
+```ruby
+<%= castle_javascript_tag %>
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Add the following tag to the the `<form>` tag in both `devise/registrations/new.html.erb` and `devise/sessions/new.html.erb` (if you haven't generated them yet, run `rails generate devise:views`):
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+<%= form_for @user do |f| %>
+  …
+  <%= castle_request_token %>
+  …
+<% end %>
+```
 
-## Contributing
+You're set! Now verify that everything works by logging in to your application as any user. You should be able to see that User on the [Castle Users Page](https://dashboard.castle.io/users)
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/castle-devise.
+
+#### Further steps if you're using Webpacker
+
+Add `castle.js` to your package.json file.
+
+TODO: fill this in.
