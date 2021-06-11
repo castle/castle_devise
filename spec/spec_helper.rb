@@ -2,15 +2,15 @@
 
 ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../dummy_app/config/environment.rb",  __FILE__)
+require File.expand_path("../dummy_app/config/environment.rb", __FILE__)
 require "rspec/rails"
 require "castle_devise"
 
-Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |f| require f }
+Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
 
 Rails.backtrace_cleaner.remove_silencers!
 
-ActiveRecord::MigrationContext.new(File.expand_path('../dummy_app/db/migrate', __FILE__)).migrate
+ActiveRecord::MigrationContext.new(File.expand_path("../dummy_app/db/migrate", __FILE__)).migrate
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
