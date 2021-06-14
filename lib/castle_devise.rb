@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "castle"
 require "devise"
 
 module CastleDevise
@@ -19,8 +20,14 @@ module CastleDevise
       Castle.config.logger = configuration.logger
     end
 
+    # @return [CastleDevise::SdkFacade]
     def sdk_facade
-      @sdk_facade ||= CastleDevise::SdkFacade.new(Castle::Client.new)
+      @sdk_facade ||= CastleDevise::SdkFacade.new(castle)
+    end
+
+    # @return [Castle::Client]
+    def castle
+      @castle ||= Castle::Client.new
     end
   end
 end

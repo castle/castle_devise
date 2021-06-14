@@ -21,18 +21,17 @@ module CastleDevise
     end
 
     # @param event [String]
-    # @param status [String]
     # @param resource [ActiveRecord::Base]
     # @param rack_request [Rack::Request]
-    def risk(event:, status:, resource:, rack_request:)
+    def risk(event:, resource:, rack_request:)
       castle.risk(
         event: event,
-        status: status,
+        status: "$succeeded",
         user: {
           id: resource.castle_id,
           email: resource.email,
           registered_at: resource.created_at.utc.iso8601(3),
-          traits: resource.castle_traits,
+          traits: resource.castle_traits
         },
         request_token: rack_request.env["action_dispatch.request.parameters"]["castle_request_token"],
         context: Castle::Context::Prepare.call(rack_request)
