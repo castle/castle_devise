@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe "Logging in", type: :request do
-  let(:user) do
+  let!(:user) do
     User.create!(
       email: "user@example.com",
       password: "123456",
