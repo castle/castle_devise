@@ -45,10 +45,10 @@ RSpec.describe "Logging in", type: :request do
       let(:policy_action) { "allow" }
 
       it "calls the facade with valid arguments" do
-        expect(facade).to have_received(:risk) do |event:, resource:, rack_request:|
+        expect(facade).to have_received(:risk) do |event:, context:|
           expect(event).to eq("$login")
-          expect(resource).to eq(user)
-          expect(rack_request).to be_a(Rack::Request)
+          expect(context).to be_a(CastleDevise::Context)
+          expect(context.resource).to eq(user)
         end
       end
 
@@ -61,10 +61,10 @@ RSpec.describe "Logging in", type: :request do
       let(:policy_action) { "challenge" }
 
       it "calls the facade with valid arguments" do
-        expect(facade).to have_received(:risk) do |event:, resource:, rack_request:|
+        expect(facade).to have_received(:risk) do |event:, context:|
           expect(event).to eq("$login")
-          expect(resource).to eq(user)
-          expect(rack_request).to be_a(Rack::Request)
+          expect(context).to be_a(CastleDevise::Context)
+          expect(context.resource).to eq(user)
         end
       end
 
@@ -76,10 +76,10 @@ RSpec.describe "Logging in", type: :request do
       let(:policy_action) { "deny" }
 
       it "calls the facade with valid arguments" do
-        expect(facade).to have_received(:risk) do |event:, resource:, rack_request:|
+        expect(facade).to have_received(:risk) do |event:, context:|
           expect(event).to eq("$login")
-          expect(resource).to eq(user)
-          expect(rack_request).to be_a(Rack::Request)
+          expect(context).to be_a(CastleDevise::Context)
+          expect(context.resource).to eq(user)
         end
       end
 

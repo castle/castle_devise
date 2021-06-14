@@ -11,30 +11,29 @@ module CastleDevise
     end
 
     # @param event [String]
-    # @param rack_request [Rack::Request]
-    def filter(event:, rack_request:)
+    # @param context [CastleDevise::Context]
+    def filter(event:, context:)
       castle.filter(
         event: event,
-        request_token: rack_request.env["action_dispatch.request.parameters"]["castle_request_token"],
-        context: Castle::Context::Prepare.call(rack_request)
+        request_token: context.request_token,
+        context: Castle::Context::Prepare.call(context.rack_request)
       )
     end
 
     # @param event [String]
-    # @param resource [ActiveRecord::Base]
-    # @param rack_request [Rack::Request]
-    def risk(event:, resource:, rack_request:)
+    # @param context [CastleDevise::Context]
+    def risk(event:, context:)
       castle.risk(
         event: event,
         status: "$succeeded",
         user: {
-          id: resource.castle_id,
-          email: resource.email,
-          registered_at: resource.created_at.utc.iso8601(3),
-          traits: resource.castle_traits
+          id: context.castle_id,
+          email: context.email,
+          registered_at: context.registered_at.utc.iso8601(3),
+          traits: context.user_traits
         },
-        request_token: rack_request.env["action_dispatch.request.parameters"]["castle_request_token"],
-        context: Castle::Context::Prepare.call(rack_request)
+        request_token: context.request_token,
+        context: Castle::Context::Prepare.call(context.rack_request)
       )
     end
   end

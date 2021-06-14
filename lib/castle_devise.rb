@@ -33,6 +33,7 @@ module CastleDevise
 end
 
 require_relative "castle_devise/configuration"
+require_relative "castle_devise/context"
 require_relative "castle_devise/patches"
 require_relative "castle_devise/sdk_facade"
 require_relative "castle_devise/controllers/helpers"
