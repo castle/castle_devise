@@ -31,9 +31,9 @@ RSpec.describe "Registration attempt", type: :request do
     let(:policy_action) { "allow" }
 
     it "sends requests to Castle" do
-      expect(facade).to have_received(:filter) do |event:, rack_request:|
+      expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(rack_request).to be_a(Rack::Request)
+        expect(context).to be_a(CastleDevise::Context)
       end
     end
 
@@ -46,9 +46,9 @@ RSpec.describe "Registration attempt", type: :request do
     let(:policy_action) { "challenge" }
 
     it "sends requests to Castle" do
-      expect(facade).to have_received(:filter) do |event:, rack_request:|
+      expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(rack_request).to be_a(Rack::Request)
+        expect(context).to be_a(CastleDevise::Context)
       end
     end
 
@@ -59,9 +59,9 @@ RSpec.describe "Registration attempt", type: :request do
     let(:policy_action) { "deny" }
 
     it "sends requests to Castle" do
-      expect(facade).to have_received(:filter) do |event:, rack_request:|
+      expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(rack_request).to be_a(Rack::Request)
+        expect(context).to be_a(CastleDevise::Context)
       end
     end
 

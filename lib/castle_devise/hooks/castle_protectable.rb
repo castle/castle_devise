@@ -3,17 +3,17 @@
 Warden::Manager.after_authentication do |resource, warden, opts|
   next unless resource.respond_to?(:castle_id)
 
+  context = CastleDevise::Context.from_warden(warden, resource, opts[:scope])
+
   begin
     response = CastleDevise.sdk_facade.risk(
       event: "$login",
-      resource: resource,
-      rack_request: Rack::Request.new(warden.env)
+      context: context
     )
     case response.dig(:policy, :action)
     when "deny"
       # high ATO risk, pretend the User does not exist
-      warden.logout(opts[:scope])
-      throw(:warden, scope: opts[:scope], message: :not_found_in_database)
+      context.logout!
     when "challenge"
       # You might implement an MFA challenge flow here
     else

@@ -12,7 +12,7 @@ module CastleDevise
       def castle_filter
         response = CastleDevise.sdk_facade.filter(
           event: "$registration",
-          rack_request: Rack::Request.new(request.env)
+          context: CastleDevise::Context.from_rack_env(request.env)
         )
 
         case response.dig(:policy, :action)
