@@ -18,8 +18,12 @@ module CastleDevise
 
       # @param rack_env [Hash]
       # @return [CastleDevise::Context]
-      def from_rack_env(rack_env)
-        new(rack_request: Rack::Request.new(rack_env))
+      def from_rack_env(rack_env, resource = nil, scope = nil)
+        new(
+          rack_request: Rack::Request.new(rack_env),
+          resource: resource,
+          scope: scope
+        )
       end
     end
 
