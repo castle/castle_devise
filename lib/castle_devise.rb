@@ -41,6 +41,7 @@ require_relative "castle_devise/helpers/castle_helper"
 require_relative "castle_devise/hooks/castle_protectable"
 require_relative "castle_devise/models/castle_protectable"
 require_relative "castle_devise/patches/registrations_controller"
+require_relative "castle_devise/patches/registrations_controller_prepend"
 
 require_relative "castle_devise/rails"
 
