@@ -18,8 +18,8 @@ module CastleDevise
 
       # @param rack_env [Hash]
       # @return [CastleDevise::Context]
-      def from_rack_env(rack_env)
-        new(rack_request: Rack::Request.new(rack_env))
+      def from_rack_env(rack_env, scope = nil)
+        new(rack_request: Rack::Request.new(rack_env), scope: scope)
       end
     end
 
@@ -46,7 +46,7 @@ module CastleDevise
 
     # @return [String, nil]
     def email
-      resource&.email
+      resource&.email || email_from_form_params
     end
 
     # @return [Hash]
@@ -59,13 +59,23 @@ module CastleDevise
       resource&.created_at
     end
 
-    # Logs out current resource
+    # Logs out current resource. Adds `castle_devise: :skip` to the authentication options
+    # to make sure we do not accidentally call Castle due to auth failure.
     def logout!
       warden.logout(scope)
-      throw(:warden, scope: scope, message: :not_found_in_database)
+      throw(:warden, scope: scope, castle_devise: :skip, message: :not_found_in_database)
     end
 
     private
+
+    # Attempts to retrieve an email from Rack form parameters for the current Devise scope.
+    #
+    # @return [String, nil]
+    def email_from_form_params
+      return unless scope
+
+      rack_request.env.dig("rack.request.form_hash", scope.to_s, "email")
+    end
 
     # @return [Warden::Proxy]
     def warden
