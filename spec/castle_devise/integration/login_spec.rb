@@ -11,28 +11,69 @@ RSpec.describe "Logging in", type: :request do
 
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
 
+  let(:castle_risk_response) do
+    {
+      risk: 0.4,
+      signals: {},
+      policy: {
+        action: policy_action,
+        name: "My Policy",
+        id: "e14c5a8d-c682-4a22-bbca-04fa6b98ad0c",
+        revision_id: "b5cf794e-88c0-426e-8276-037ba1e7ceca"
+      },
+      device: {
+        token: "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlQyQ"
+      }
+    }
+  end
+  let(:policy_action) { "allow" }
+
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
-    allow(facade).to receive(:risk).and_return(castle_response)
+    allow(facade).to receive(:risk).and_return(castle_risk_response)
   end
 
-  describe "with correct password" do
-    let(:castle_response) do
-      {
-        risk: 0.4,
-        signals: {},
-        policy: {
-          action: policy_action,
-          name: "My Policy",
-          id: "e14c5a8d-c682-4a22-bbca-04fa6b98ad0c",
-          revision_id: "b5cf794e-88c0-426e-8276-037ba1e7ceca"
-        },
-        device: {
-          token: "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlQyQ"
+  context "with non-existing user" do
+    before do
+      allow(facade).to receive(:log)
+
+      post "/users/sign_in",
+        params: {
+          user: {email: "non-existing@example.com", password: "123456"},
+          castle_request_token: "token123"
         }
-      }
     end
 
+    it "logs the event" do
+      expect(facade).to have_received(:log) do |event:, status:, context:|
+        expect(event).to eq("$login")
+        expect(status).to eq("$failed")
+        expect(context.email).to eq("non-existing@example.com")
+      end
+    end
+  end
+
+  context "with incorrect password" do
+    before do
+      allow(facade).to receive(:log)
+
+      post "/users/sign_in",
+        params: {
+          user: {email: user.email, password: "333"},
+          castle_request_token: "token123"
+        }
+    end
+
+    it "logs the event" do
+      expect(facade).to have_received(:log) do |event:, status:, context:|
+        expect(event).to eq("$login")
+        expect(status).to eq("$failed")
+        expect(context.email).to eq(user.email)
+      end
+    end
+  end
+
+  context "with correct password" do
     before do
       post "/users/sign_in",
         params: {

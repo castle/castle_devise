@@ -29,12 +29,38 @@ module CastleDevise
         user: {
           id: context.castle_id,
           email: context.email,
-          registered_at: context.registered_at.utc.iso8601(3),
+          registered_at: format_time(context.registered_at),
           traits: context.user_traits
         },
         request_token: context.request_token,
         context: Castle::Context::Prepare.call(context.rack_request)
       )
+    end
+
+    # @param event [String]
+    # @param status [String, nil]
+    # @param context [CastleDevise::Context]
+    def log(event:, status:, context:)
+      castle.log(
+        event: event,
+        status: status,
+        user: {
+          id: context.castle_id,
+          email: context.email,
+          registered_at: format_time(context.registered_at),
+          traits: context.user_traits
+        },
+        request_token: context.request_token,
+        context: Castle::Context::Prepare.call(context.rack_request)
+      )
+    end
+
+    private
+
+    # @param time [Time, nil]
+    # @return [String, nil]
+    def format_time(time)
+      time&.utc&.iso8601(3)
     end
   end
 end
