@@ -5,19 +5,19 @@ Warden::Manager.after_authentication do |resource, warden, opts|
 
   context = CastleDevise::Context.from_warden(warden, resource, opts[:scope])
 
+  warden.env["castle_devise.risk_context"] = context
+
   begin
     response = CastleDevise.sdk_facade.risk(
       event: "$login",
       context: context
     )
-    case response.dig(:policy, :action)
-    when "deny"
+
+    warden.env["castle_devise.risk_response"] = response
+
+    if response.dig(:policy, :action) == "deny"
       # high ATO risk, pretend the User does not exist
       context.logout!
-    when "challenge"
-      # You might implement an MFA challenge flow here
-    else
-      # everything fine, continue
     end
   rescue Castle::Error => e
     # log API errors and allow
