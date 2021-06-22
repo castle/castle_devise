@@ -117,3 +117,7 @@ class SessionsController < Devise::SessionsController
   end
 end
 ```
+
+Please note that some Devise extensions might completely override `Devise::SessionsController#create`.
+In this case, you have to handle everything manually -  `castle_challenge?` should be called after
+a call to `warden.authenticate!` has been successful.
