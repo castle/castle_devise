@@ -36,7 +36,7 @@ module CastleDevise
 
     # @return [String, nil] Castle request token, if present in POST params
     def request_token
-      rack_request.env["rack.request.form_hash"]["castle_request_token"]
+      rack_request.env.dig("rack.request.form_hash", "castle_request_token")
     end
 
     # @return [String, nil]

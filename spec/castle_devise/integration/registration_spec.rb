@@ -33,7 +33,8 @@ RSpec.describe "Registration attempt", type: :request do
     it "sends requests to Castle" do
       expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(context).to be_a(CastleDevise::Context)
+        expect(context.email).to eq("user@example.com")
+        expect(context.request_token).to eq("token123")
       end
     end
 
@@ -48,11 +49,10 @@ RSpec.describe "Registration attempt", type: :request do
     it "sends requests to Castle" do
       expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(context).to be_a(CastleDevise::Context)
+        expect(context.email).to eq("user@example.com")
+        expect(context.request_token).to eq("token123")
       end
     end
-
-    xit "does something useful"
   end
 
   describe "when Castle returns a deny verdict" do
@@ -61,7 +61,8 @@ RSpec.describe "Registration attempt", type: :request do
     it "sends requests to Castle" do
       expect(facade).to have_received(:filter) do |event:, context:|
         expect(event).to eq("$registration")
-        expect(context).to be_a(CastleDevise::Context)
+        expect(context.email).to eq("user@example.com")
+        expect(context.request_token).to eq("token123")
       end
     end
 
