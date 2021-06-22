@@ -23,7 +23,7 @@ module CastleDevise
     # @param event [String]
     # @param context [CastleDevise::Context]
     def risk(event:, context:)
-      castle.risk(
+      payload = {
         event: event,
         status: "$succeeded",
         user: {
@@ -34,7 +34,11 @@ module CastleDevise
         },
         request_token: context.request_token,
         context: Castle::Context::Prepare.call(context.rack_request)
-      )
+      }
+
+      payload[:user][:name] = context.username if context.username
+
+      castle.risk(payload)
     end
 
     # @param event [String]

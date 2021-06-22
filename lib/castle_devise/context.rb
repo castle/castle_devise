@@ -49,6 +49,11 @@ module CastleDevise
       resource&.email || email_from_form_params
     end
 
+    # @return [String, nil]
+    def username
+      resource&.castle_name
+    end
+
     # @return [Hash]
     def user_traits
       resource&.castle_traits || {}
