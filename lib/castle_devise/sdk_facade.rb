@@ -45,7 +45,7 @@ module CastleDevise
     # @param status [String, nil]
     # @param context [CastleDevise::Context]
     def log(event:, status:, context:)
-      castle.log(
+      payload = {
         event: event,
         status: status,
         user: {
@@ -53,10 +53,12 @@ module CastleDevise
           email: context.email,
           registered_at: format_time(context.registered_at),
           traits: context.user_traits
-        },
+        }.compact,
         request_token: context.request_token,
         context: Castle::Context::Prepare.call(context.rack_request)
-      )
+      }
+
+      castle.log(payload)
     end
 
     private
