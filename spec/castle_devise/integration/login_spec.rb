@@ -96,6 +96,11 @@ RSpec.describe "Logging in", type: :request do
       it "authenticates the user" do
         expect(request.env["warden"].user(:user)).to eq(user)
       end
+
+      it "stores context and response in Rack env" do
+        expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
+        expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
+      end
     end
 
     context "when Castle return a challenge verdict" do
@@ -109,7 +114,9 @@ RSpec.describe "Logging in", type: :request do
         end
       end
 
-      xit "challenges the user" do
+      it "stores context and response in Rack env" do
+        expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
+        expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
       end
     end
 
@@ -130,6 +137,11 @@ RSpec.describe "Logging in", type: :request do
 
       it "sets a flash message" do
         expect(flash.alert).to match(/invalid email or password/i)
+      end
+
+      it "stores context and response in Rack env" do
+        expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
+        expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
       end
     end
   end

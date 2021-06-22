@@ -12,6 +12,14 @@ module Devise
       def castle_traits
         {}
       end
+
+      # This method is meant to be overridden with a human-readable username
+      # that will be shown on the Castle Dashboard.
+      #
+      # @return [String, nil]
+      def castle_name
+        nil
+      end
     end
   end
 end
