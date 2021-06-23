@@ -10,6 +10,6 @@ module CastleDevise
     config_accessor(:api_secret)
     config_accessor(:app_id)
 
-    config_accessor(:logger) { Logger.new($stdout) }
+    config_accessor(:logger) { Logger.new('/dev/null') }
   end
 end

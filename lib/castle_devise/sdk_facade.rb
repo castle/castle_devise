@@ -15,6 +15,9 @@ module CastleDevise
     def filter(event:, context:)
       castle.filter(
         event: event,
+        user: {
+          email: context.email,
+        },
         request_token: context.request_token,
         context: Castle::Context::Prepare.call(context.rack_request)
       )
