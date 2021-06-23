@@ -123,25 +123,52 @@ RSpec.describe "Logging in", type: :request do
     context "when Castle returns a deny verdict" do
       let(:policy_action) { "deny" }
 
-      it "calls the facade with valid arguments" do
-        expect(facade).to have_received(:risk) do |event:, context:|
-          expect(event).to eq("$login")
-          expect(context).to be_a(CastleDevise::Context)
-          expect(context.resource).to eq(user)
+      context "and monitoring mode is enabled" do
+        around do |example|
+          CastleDevise.configuration.monitoring_mode = true
+          example.run
+          CastleDevise.configuration.monitoring_mode = false
+        end
+
+        it "calls the facade with valid arguments" do
+          expect(facade).to have_received(:risk) do |event:, context:|
+            expect(event).to eq("$login")
+            expect(context).to be_a(CastleDevise::Context)
+            expect(context.resource).to eq(user)
+          end
+        end
+
+        it "authenticates the user" do
+          expect(request.env["warden"].user(:user)).to eq(user)
+        end
+
+        it "stores context and response in Rack env" do
+          expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
+          expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
         end
       end
 
-      it "does not authenticate the user" do
-        expect(request.env["warden"].user(:user)).to be_nil
-      end
+      context "and monitoring mode is disabled" do
+        it "calls the facade with valid arguments" do
+          expect(facade).to have_received(:risk) do |event:, context:|
+            expect(event).to eq("$login")
+            expect(context).to be_a(CastleDevise::Context)
+            expect(context.resource).to eq(user)
+          end
+        end
 
-      it "sets a flash message" do
-        expect(flash.alert).to match(/invalid email or password/i)
-      end
+        it "does not authenticate the user" do
+          expect(request.env["warden"].user(:user)).to be_nil
+        end
 
-      it "stores context and response in Rack env" do
-        expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
-        expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
+        it "sets a flash message" do
+          expect(flash.alert).to match(/invalid email or password/i)
+        end
+
+        it "stores context and response in Rack env" do
+          expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
+          expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
+        end
       end
     end
   end

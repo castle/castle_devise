@@ -19,6 +19,8 @@ module CastleDevise
           context: CastleDevise::Context.from_rack_env(request.env, resource_name)
         )
 
+        return if CastleDevise.monitoring_mode?
+
         case response.dig(:policy, :action)
         when "deny"
           flash.alert = "Account cannot be created at this moment. Please try again later"

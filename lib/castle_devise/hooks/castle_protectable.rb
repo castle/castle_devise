@@ -15,6 +15,8 @@ Warden::Manager.after_authentication do |resource, warden, opts|
 
     warden.env["castle_devise.risk_response"] = response
 
+    next if CastleDevise.monitoring_mode?
+
     if response.dig(:policy, :action) == "deny"
       # high ATO risk, pretend the User does not exist
       context.logout!

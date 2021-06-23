@@ -31,6 +31,11 @@ require "devise"
       Castle.config.logger = configuration.logger
     end
 
+    # @return [true, false] whether in monitoring mode or not
+    def monitoring_mode?
+      configuration.monitoring_mode
+    end
+
     # @return [CastleDevise::SdkFacade]
     def sdk_facade
       @sdk_facade ||= CastleDevise::SdkFacade.new(castle)
