@@ -2,6 +2,9 @@
 
 module CastleDevise
   module Patches
+    # Monkey-patch for
+    # {https://github.com/heartcombo/devise/blob/master/app/controllers/devise/registrations_controller.rb Devise::RegistrationsController}
+    # which includes Castle in the registration workflow.
     module RegistrationsController
       extend ActiveSupport::Concern
 
@@ -9,6 +12,7 @@ module CastleDevise
         before_action :castle_filter, only: :create
       end
 
+      # Sends a /v1/filter request to Castle
       def castle_filter
         response = CastleDevise.sdk_facade.filter(
           event: "$registration",

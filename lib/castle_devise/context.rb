@@ -18,17 +18,22 @@ module CastleDevise
 
       # @param rack_env [Hash]
       # @return [CastleDevise::Context]
-      def from_rack_env(rack_env, scope = nil)
+      def from_rack_env(rack_env, scope)
         new(rack_request: Rack::Request.new(rack_env), scope: scope)
       end
     end
 
-    attr_reader :rack_request, :resource, :scope
+    # @return [Rack::Request]
+    attr_reader :rack_request
+    # @return [ActiveRecord::Base, nil]
+    attr_reader :resource
+    # @return [Symbol] The Devise scope for the resource
+    attr_reader :scope
 
     # @param rack_request [Rack::Request]
-    # @param resource [ActiveRecord::Base]
+    # @param resource [ActiveRecord::Base, nil]
     # @param scope [Symbol] Warden scope
-    def initialize(rack_request:, resource: nil, scope: nil)
+    def initialize(rack_request:, resource: nil, scope:)
       @rack_request = rack_request
       @resource = resource
       @scope = scope
@@ -39,11 +44,14 @@ module CastleDevise
       rack_request.env.dig("rack.request.form_hash", "castle_request_token")
     end
 
-    # @return [String, nil]
+    # @return [String, nil] user_id that will be sent to Castle
     def castle_id
       resource&.castle_id
     end
 
+    # Email for the current context. If there is no resource available (eg. for a failed login request)
+    # this method will attempt to fetch an email from Rack POST parameters using the current Devise scope.
+    #
     # @return [String, nil]
     def email
       resource&.email || email_from_form_params
@@ -54,7 +62,7 @@ module CastleDevise
       resource&.castle_name
     end
 
-    # @return [Hash]
+    # @return [Hash] additional user traits that will be sent to Castle
     def user_traits
       resource&.castle_traits || {}
     end
@@ -77,8 +85,6 @@ module CastleDevise
     #
     # @return [String, nil]
     def email_from_form_params
-      return unless scope
-
       rack_request.env.dig("rack.request.form_hash", scope.to_s, "email")
     end
 
