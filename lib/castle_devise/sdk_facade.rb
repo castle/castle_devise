@@ -3,6 +3,7 @@
 module CastleDevise
   # A Facade layer providing a simpler API on top of the Castle SDK
   class SdkFacade
+    # @return [Castle::Client]
     attr_reader :castle
 
     # @param castle [Castle::Client]
@@ -10,8 +11,11 @@ module CastleDevise
       @castle = castle
     end
 
+    # Sends request to the /v1/filter endpoint.
     # @param event [String]
     # @param context [CastleDevise::Context]
+    # @return [Hash] Raw API response
+    # @see https://docs.castle.io/v1/reference/api-reference/#v1filter
     def filter(event:, context:)
       castle.filter(
         event: event,
@@ -23,8 +27,11 @@ module CastleDevise
       )
     end
 
+    # Sends request to the /v1/risk endpoint.
     # @param event [String]
     # @param context [CastleDevise::Context]
+    # @return [Hash] Raw API response
+    # @see https://docs.castle.io/v1/reference/api-reference/#v1risk
     def risk(event:, context:)
       payload = {
         event: event,
@@ -44,9 +51,12 @@ module CastleDevise
       castle.risk(payload)
     end
 
+    # Sends request to the /v1/log endpoint.
     # @param event [String]
     # @param status [String, nil]
     # @param context [CastleDevise::Context]
+    # @return [Hash] Raw API response
+    # @see https://docs.castle.io/v1/reference/api-reference/#v1log
     def log(event:, status:, context:)
       payload = {
         event: event,

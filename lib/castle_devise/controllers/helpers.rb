@@ -2,6 +2,7 @@
 
 module CastleDevise
   module Controllers
+    # Methods defined here will be included in all your controllers.
     module Helpers
       # @return [Castle::Client]
       def castle
@@ -17,6 +18,7 @@ module CastleDevise
       end
 
       # Returns true if Castle Risk API call resulted in a "challenge" action.
+      # Returns false if no request has been made, or the action was different than "challenge".
       #
       # @return [true, false]
       def castle_challenge?

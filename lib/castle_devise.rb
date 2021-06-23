@@ -3,16 +3,27 @@
 require "castle"
 require "devise"
 
-module CastleDevise
+# CastleDevise consists of a few different parts:
+#
+# - Devise castle_protectable module defined in lib/castle_devise/models/
+# - Minimal monkey patches to Devise controller defined in lib/castle_devise/patches/
+# - Warden hooks defined in lib/castle_devise/hooks/
+# - A Facade layer on top of the Castle SDK: {CastleDevise::SdkFacade}
+# - A Context object that contains all the data you might want to use when integrating
+#   Castle with your application: {CastleDevise::Context}
+  module CastleDevise
   class << self
+    # @return [CastleDevise::Configuration]
     def configuration
       @configuration ||= Configuration.new
     end
 
+    # @return [Logger]
     def logger
       configuration.logger
     end
 
+    # @yieldparam [CastleDevise::Configuration] configuration object
     def configure
       yield configuration
 
