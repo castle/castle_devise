@@ -22,6 +22,16 @@ Create `config/initializers/castle_devise.rb` and fill in your API secret and AP
 CastleDevise.configure do |config|
   config.api_secret = ENV.fetch('CASTLE_API_SECRET')
   config.app_id = ENV.fetch('CASTLE_APP_ID')
+  
+  # When monitoring mode is enabled, CastleDevise sends
+  # requests to Castle but it doesn't act on the "deny" verdicts.
+  #
+  # This is useful when you want to check out how Castle scores
+  # your traffic without blocking any of your users.
+  #
+  # Once you are ready to use Castle as your security provider,
+  # you can set monitoring_mode to false.
+  config.monitoring_mode = true
 end
 ```
 

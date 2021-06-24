@@ -58,24 +58,46 @@ RSpec.describe "Registration attempt", type: :request do
   describe "when Castle returns a deny verdict" do
     let(:policy_action) { "deny" }
 
-    it "sends requests to Castle" do
-      expect(facade).to have_received(:filter) do |event:, context:|
-        expect(event).to eq("$registration")
-        expect(context.email).to eq("user@example.com")
-        expect(context.request_token).to eq("token123")
+    context "and monitoring mode is enabled" do
+      around do |example|
+        CastleDevise.configuration.monitoring_mode = true
+        example.run
+        CastleDevise.configuration.monitoring_mode = false
+      end
+
+      it "sends requests to Castle" do
+        expect(facade).to have_received(:filter) do |event:, context:|
+          expect(event).to eq("$registration")
+          expect(context.email).to eq("user@example.com")
+          expect(context.request_token).to eq("token123")
+        end
+      end
+
+      it "creates a user" do
+        expect(request.env["warden"].user(:user)).to be_persisted
       end
     end
 
-    it "does not create a user" do
-      expect(request.env["warden"].user(:user)).to be_nil
-    end
+    context "and monitoring mode is disabled" do
+      it "sends requests to Castle" do
+        expect(facade).to have_received(:filter) do |event:, context:|
+          expect(event).to eq("$registration")
+          expect(context.email).to eq("user@example.com")
+          expect(context.request_token).to eq("token123")
+        end
+      end
 
-    it "sets a flash message" do
-      expect(flash.alert).to match(/account cannot be created/i)
-    end
+      it "does not create a user" do
+        expect(request.env["warden"].user(:user)).to be_nil
+      end
 
-    it "redirects to the login page" do
-      expect(response).to redirect_to("/users/sign_in")
+      it "sets a flash message" do
+        expect(flash.alert).to match(/account cannot be created/i)
+      end
+
+      it "redirects to the login page" do
+        expect(response).to redirect_to("/users/sign_in")
+      end
     end
   end
 end
