@@ -1,3 +1,7 @@
+**Disclaimer:** CastleDevise is currently in beta. There might be some upcoming breaking changes to the gem before we stabilize the API.
+
+--- 
+
 # CastleDevice
 
 CastleDevise is a [Devise](https://github.com/heartcombo/devise) plugin that integrates [Castle](https://castle.io). 
