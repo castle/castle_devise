@@ -28,6 +28,14 @@ RSpec.describe "Logging in", type: :request do
   end
   let(:policy_action) { "allow" }
 
+  def send_sign_in_request(email, password, request_token)
+    post "/users/sign_in",
+      params: {
+        user: {email: email, password: password},
+        castle_request_token: request_token
+      }
+  end
+
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
     allow(facade).to receive(:risk).and_return(castle_risk_response)
@@ -37,11 +45,7 @@ RSpec.describe "Logging in", type: :request do
     before do
       allow(facade).to receive(:log)
 
-      post "/users/sign_in",
-        params: {
-          user: {email: "non-existing@example.com", password: "123456"},
-          castle_request_token: "token123"
-        }
+      send_sign_in_request("non-existing@example.com", "123456", "token123")
     end
 
     it "logs the event" do
@@ -51,17 +55,21 @@ RSpec.describe "Logging in", type: :request do
         expect(context.email).to eq("non-existing@example.com")
       end
     end
+
+    it "is successful" do
+      expect(response).to be_successful
+    end
+
+    it "contains proper flash message" do
+      expect(flash.alert).to match(/invalid email or password/i)
+    end
   end
 
   context "with incorrect password" do
     before do
       allow(facade).to receive(:log)
 
-      post "/users/sign_in",
-        params: {
-          user: {email: user.email, password: "333"},
-          castle_request_token: "token123"
-        }
+      send_sign_in_request(user.email, "333", "token123")
     end
 
     it "logs the event" do
@@ -71,19 +79,42 @@ RSpec.describe "Logging in", type: :request do
         expect(context.email).to eq(user.email)
       end
     end
+
+    it "is successful" do
+      expect(response).to be_successful
+    end
+
+    it "contains proper flash message" do
+      expect(flash.alert).to match(/invalid email or password/i)
+    end
+  end
+
+  context "with invalid request token" do
+    before do
+      allow(facade).to receive(:log).and_raise(Castle::InvalidParametersError)
+      allow(CastleDevise.logger).to receive(:error)
+
+      send_sign_in_request(user.email, "333", "token123")
+    end
+
+    it "logs the error" do
+      expect(CastleDevise.logger).to have_received(:error)
+    end
+
+    it "is successful" do
+      expect(response).to be_successful
+    end
+
+    it "contains proper flash message" do
+      expect(flash.alert).to match(/invalid email or password/i)
+    end
   end
 
   context "with correct password" do
-    before do
-      post "/users/sign_in",
-        params: {
-          user: {email: user.email, password: "123456"},
-          castle_request_token: "token123"
-        }
-    end
-
     context "when Castle returns an allow verdict" do
       let(:policy_action) { "allow" }
+
+      before { send_sign_in_request(user.email, "123456", "token123") }
 
       it "calls the facade with valid arguments" do
         expect(facade).to have_received(:risk) do |event:, context:|
@@ -106,6 +137,8 @@ RSpec.describe "Logging in", type: :request do
     context "when Castle return a challenge verdict" do
       let(:policy_action) { "challenge" }
 
+      before { send_sign_in_request(user.email, "123456", "token123") }
+
       it "calls the facade with valid arguments" do
         expect(facade).to have_received(:risk) do |event:, context:|
           expect(event).to eq("$login")
@@ -122,6 +155,8 @@ RSpec.describe "Logging in", type: :request do
 
     context "when Castle returns a deny verdict" do
       let(:policy_action) { "deny" }
+
+      before { send_sign_in_request(user.email, "123456", "token123") }
 
       context "and monitoring mode is enabled" do
         around do |example|
@@ -169,6 +204,51 @@ RSpec.describe "Logging in", type: :request do
           expect(request.env["castle_devise.risk_response"]).to eq(castle_risk_response)
           expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
         end
+      end
+    end
+
+    context "when Castle raises InvalidParametersError" do
+      before do
+        allow(facade).to receive(:risk).and_raise(Castle::InvalidParametersError)
+        send_sign_in_request(user.email, "123456", "token123")
+      end
+
+      context "and monitoring mode is enabled" do
+        around do |example|
+          CastleDevise.configuration.monitoring_mode = true
+          example.run
+          CastleDevise.configuration.monitoring_mode = false
+        end
+
+        it "authenticates the user" do
+          expect(request.env["warden"].user(:user)).to eq(user)
+        end
+      end
+
+      context "and monitoring mode is disabled" do
+        it "does not authenticate the user" do
+          expect(request.env["warden"].user(:user)).to be_nil
+        end
+
+        it "sets a flash message" do
+          expect(flash.alert).to match(/invalid email or password/i)
+        end
+      end
+    end
+
+    context "when Castle raises other error" do
+      before do
+        allow(facade).to receive(:risk).and_raise(Castle::Error)
+        allow(CastleDevise.logger).to receive(:error)
+        send_sign_in_request(user.email, "123456", "token123")
+      end
+
+      it "logs the error" do
+        expect(CastleDevise.logger).to have_received(:error)
+      end
+
+      it "authenticates the user" do
+        expect(request.env["warden"].user(:user)).to eq(user)
       end
     end
   end

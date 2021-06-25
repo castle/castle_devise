@@ -11,7 +11,7 @@ require "devise"
 # - A Facade layer on top of the Castle SDK: {CastleDevise::SdkFacade}
 # - A Context object that contains all the data you might want to use when integrating
 #   Castle with your application: {CastleDevise::Context}
-  module CastleDevise
+module CastleDevise
   class << self
     # @return [CastleDevise::Configuration]
     def configuration

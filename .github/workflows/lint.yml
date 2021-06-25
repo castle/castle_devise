@@ -14,5 +14,5 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review # Default is github-pr-check
-          rubocop_version: 1.1.14
+          rubocop_version: 1.1.1 # note: this actually refers to standardb version, not Rubocop
           rubocop_flags: --format progress

@@ -29,6 +29,6 @@ module CastleDevise
 
     # @!attribute logger
     #   @return [Logger] A Logger instance. You might want to use Rails.logger here.
-    config_accessor(:logger) { Logger.new('/dev/null') }
+    config_accessor(:logger) { Logger.new("/dev/null") }
   end
 end
