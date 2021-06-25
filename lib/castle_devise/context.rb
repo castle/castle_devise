@@ -33,7 +33,7 @@ module CastleDevise
     # @param rack_request [Rack::Request]
     # @param resource [ActiveRecord::Base, nil]
     # @param scope [Symbol] Warden scope
-    def initialize(rack_request:, resource: nil, scope:)
+    def initialize(rack_request:, scope:, resource: nil)
       @rack_request = rack_request
       @resource = resource
       @scope = scope

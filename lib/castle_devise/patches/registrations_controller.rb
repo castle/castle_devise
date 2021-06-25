@@ -23,15 +23,31 @@ module CastleDevise
 
         case response.dig(:policy, :action)
         when "deny"
-          flash.alert = "Account cannot be created at this moment. Please try again later"
+          flash.alert = "Account cannot be created at this moment. Please try again later."
           redirect_to new_session_path(resource_name)
           false
         else
           # everything fine, continue
         end
+      rescue Castle::InvalidParametersError
+        # TODO: We should act differently if the error is about missing/invalid request token
+        #   compared to any other validation errors. However, we can't do this with the
+        #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+        CastleDevise.logger.warn(
+          "[CastleDevise] /v1/filter request contained invalid parameters." \
+          " This might mean that either you didn't configure Castle's Javascript properly, or" \
+          " a request has been made without Javascript (eg. cURL/bot)." \
+          " Such a request is treated as if Castle responded with a 'deny' action in non-monitoring mode."
+        )
+
+        unless CastleDevise.monitoring_mode?
+          flash.alert = "Account cannot be created at this moment. Please try again later."
+          redirect_to new_session_path(resource_name)
+          false
+        end
       rescue Castle::Error => e
         # log API errors and allow
-        logger.info "#{e}: #{e.message}"
+        CastleDevise.logger.error("[CastleDevise] filter($registration): #{e}")
       end
     end
   end
