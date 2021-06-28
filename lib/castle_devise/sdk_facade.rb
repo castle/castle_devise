@@ -84,10 +84,9 @@ module CastleDevise
     def payload_context(rack_request)
       ctx = Castle::Context::Prepare.call(rack_request)
 
+      # Castle SDK still generates some legacy parameters which can be removed
+      # when sending requests to the new Castle endpoints
       ctx.slice!(:headers, :ip, :library)
-
-      ctx[:library][:name] += "; CastleDevise"
-      ctx[:library][:version] += "; #{CastleDevise::VERSION}"
 
       ctx
     end

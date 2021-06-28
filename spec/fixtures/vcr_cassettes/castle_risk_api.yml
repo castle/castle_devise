@@ -5,8 +5,7 @@ http_interactions:
     uri: https://api.castle.io/v1/risk
     body:
       encoding: UTF-8
-      string: '{"event":"$registration","status":"$succeeded","user":{"id":"1","email":"user@example.com","registered_at":"2021-06-28T10:07:57.464Z","traits":{}},"request_token":"3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg","context":{"headers":{"Content-Length":"0","Remote-Addr":"1.2.3.4"},"ip":"1.2.3.4","library":{"name":"castle-rb;
-        CastleDevise","version":"7.1.1; 0.1.0"}},"timestamp":"2021-06-28T10:07:57.437Z","sent_at":"2021-06-28T10:07:57.465Z"}'
+      string: '{"event":"$registration","status":"$succeeded","user":{"id":"1","email":"user@example.com","registered_at":"2021-06-28T10:54:01.077Z","traits":{}},"request_token":"3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg","context":{"headers":{"Content-Length":"0","Remote-Addr":"1.2.3.4"},"ip":"1.2.3.4","library":{"name":"castle-rb","version":"7.1.1"}},"timestamp":"2021-06-28T10:54:01.075Z","sent_at":"2021-06-28T10:54:01.078Z"}'
     headers:
       Content-Type:
       - application/json
@@ -24,7 +23,7 @@ http_interactions:
       message: Created
     headers:
       Date:
-      - Mon, 28 Jun 2021 10:07:57 GMT
+      - Mon, 28 Jun 2021 10:54:00 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,13 +33,13 @@ http_interactions:
       Cache-Control:
       - no-cache
       Etag:
-      - W/"3a101b9f647f49e19bee212bc01ec95f"
+      - W/"75daccabfbb74254483a543988ff2c46"
       X-Request-Id:
-      - 0e76c160-3d62-410b-9c3a-87a61470e9e4
+      - 39369542-c660-4b8e-8c7b-2b69621de792
       Server:
       - castle.io
     body:
       encoding: UTF-8
-      string: '{"risk":0.83,"policy":{"action":"allow","id":"987bd110-f958-4529-b4bd-af80232547c3","revision_id":"c39e4b97-1dad-4c28-875d-7728cf06052d","name":"Default"},"signals":{"multiple_accounts_per_device":{},"datacenter_ip":{}},"device":{"token":"eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6Ik1YMGU0VDNBTXhaaFFpZldjWHhobTkxUWJLMkgiLCJxdWFsaWZpZXIiOiJBUUlEQ2pFek5Ea3pNVGd6TWpZIiwiYW5vbnltb3VzIjpmYWxzZSwidmVyc2lvbiI6MC4zfQ.AFIDEw5Qw9YFKvJT2NxwCZgE0BFvkpBzvfou4RTZ9Zs"}}'
-  recorded_at: Mon, 28 Jun 2021 10:07:58 GMT
+      string: '{"risk":0.83,"policy":{"action":"allow","id":"987bd110-f958-4529-b4bd-af80232547c3","revision_id":"c39e4b97-1dad-4c28-875d-7728cf06052d","name":"Default"},"signals":{"datacenter_ip":{}},"device":{"token":"eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6Ik1YMGU0VDNBTXhaaFFpZldjWHhobTkxUWJLMkgiLCJxdWFsaWZpZXIiOiJBUUlEQ2pFek5Ea3pNVGd6TWpZIiwiYW5vbnltb3VzIjpmYWxzZSwidmVyc2lvbiI6MC4zfQ.AFIDEw5Qw9YFKvJT2NxwCZgE0BFvkpBzvfou4RTZ9Zs"}}'
+  recorded_at: Mon, 28 Jun 2021 10:54:01 GMT
 recorded_with: VCR 6.0.0
