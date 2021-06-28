@@ -4,19 +4,9 @@ module CastleDevise
   # Provides a small layer of abstraction on top of raw Rack::Request and Warden
   class Context
     class << self
-      # @param warden [Warden::Proxy]
-      # @param resource [ActiveRecord::Base]
-      # @param scope [Symbol]
-      # @return [CastleDevise::Context]
-      def from_warden(warden, resource, scope)
-        new(
-          rack_request: Rack::Request.new(warden.env),
-          resource: resource,
-          scope: scope
-        )
-      end
-
       # @param rack_env [Hash]
+      # @param scope [Symbol] Warden scope
+      # @param resource [ActiveRecord::Base, nil]
       # @return [CastleDevise::Context]
       def from_rack_env(rack_env, scope, resource = nil)
         new(rack_request: Rack::Request.new(rack_env), scope: scope, resource: resource)
