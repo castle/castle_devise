@@ -10,23 +10,7 @@ RSpec.describe "Logging in", type: :request do
   end
 
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
-
-  let(:castle_risk_response) do
-    {
-      risk: 0.4,
-      signals: {},
-      policy: {
-        action: policy_action,
-        name: "My Policy",
-        id: "e14c5a8d-c682-4a22-bbca-04fa6b98ad0c",
-        revision_id: "b5cf794e-88c0-426e-8276-037ba1e7ceca"
-      },
-      device: {
-        token: "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlQyQ"
-      }
-    }
-  end
-  let(:policy_action) { "allow" }
+  let(:castle_risk_response) { allow_risk_response }
 
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
@@ -83,7 +67,7 @@ RSpec.describe "Logging in", type: :request do
     end
 
     context "when Castle returns an allow verdict" do
-      let(:policy_action) { "allow" }
+      let(:castle_risk_response) { allow_risk_response }
 
       it "calls the facade with valid arguments" do
         expect(facade).to have_received(:risk) do |event:, context:|
@@ -104,7 +88,7 @@ RSpec.describe "Logging in", type: :request do
     end
 
     context "when Castle return a challenge verdict" do
-      let(:policy_action) { "challenge" }
+      let(:castle_risk_response) { challenge_risk_response }
 
       it "calls the facade with valid arguments" do
         expect(facade).to have_received(:risk) do |event:, context:|
@@ -121,7 +105,7 @@ RSpec.describe "Logging in", type: :request do
     end
 
     context "when Castle returns a deny verdict" do
-      let(:policy_action) { "deny" }
+      let(:castle_risk_response) { deny_risk_response }
 
       context "and monitoring mode is enabled" do
         around do |example|

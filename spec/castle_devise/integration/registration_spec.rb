@@ -3,19 +3,6 @@
 RSpec.describe "Registration attempt", type: :request do
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
 
-  let(:castle_response) do
-    {
-      risk: 0.4,
-      signals: {},
-      policy: {
-        action: policy_action,
-        name: "My Policy",
-        id: "e14c5a8d-c682-4a22-bbca-04fa6b98ad0c",
-        revision_id: "b5cf794e-88c0-426e-8276-037ba1e7ceca"
-      }
-    }
-  end
-
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
     allow(facade).to receive(:filter).and_return(castle_response)
@@ -28,7 +15,7 @@ RSpec.describe "Registration attempt", type: :request do
   end
 
   describe "when Castle returns an allow verdict" do
-    let(:policy_action) { "allow" }
+    let(:castle_response) { allow_filter_response }
 
     it "sends requests to Castle" do
       expect(facade).to have_received(:filter) do |event:, context:|
@@ -43,20 +30,8 @@ RSpec.describe "Registration attempt", type: :request do
     end
   end
 
-  describe "when Castle returns a challenge" do
-    let(:policy_action) { "challenge" }
-
-    it "sends requests to Castle" do
-      expect(facade).to have_received(:filter) do |event:, context:|
-        expect(event).to eq("$registration")
-        expect(context.email).to eq("user@example.com")
-        expect(context.request_token).to eq("token123")
-      end
-    end
-  end
-
   describe "when Castle returns a deny verdict" do
-    let(:policy_action) { "deny" }
+    let(:castle_response) { deny_filter_response }
 
     context "and monitoring mode is enabled" do
       around do |example|

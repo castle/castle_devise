@@ -6,6 +6,8 @@ require File.expand_path("../dummy_app/config/environment.rb", __FILE__)
 require "rspec/rails"
 require "castle_devise"
 
+require "webmock/rspec"
+
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -20,6 +22,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.include Warden::Test::Helpers
+  config.include ResponseHelper
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!

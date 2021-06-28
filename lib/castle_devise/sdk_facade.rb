@@ -20,10 +20,10 @@ module CastleDevise
       castle.filter(
         event: event,
         user: {
-          email: context.email,
+          email: context.email
         },
         request_token: context.request_token,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       )
     end
 
@@ -43,7 +43,7 @@ module CastleDevise
           traits: context.user_traits
         },
         request_token: context.request_token,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       }
 
       payload[:user][:name] = context.username if context.username
@@ -68,13 +68,26 @@ module CastleDevise
           traits: context.user_traits
         }.compact,
         request_token: context.request_token,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       }
 
       castle.log(payload)
     end
 
     private
+
+    # @param rack_request [Rack::Request]
+    # @return [Hash]
+    def payload_context(rack_request)
+      ctx = Castle::Context::Prepare.call(rack_request)
+
+      ctx.slice!(:headers, :ip, :library)
+
+      ctx[:library][:name] += "; CastleDevise"
+      ctx[:library][:version] += "; #{CastleDevise::VERSION}"
+
+      ctx
+    end
 
     # @param time [Time, nil]
     # @return [String, nil]

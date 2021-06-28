@@ -18,8 +18,8 @@ module CastleDevise
 
       # @param rack_env [Hash]
       # @return [CastleDevise::Context]
-      def from_rack_env(rack_env, scope)
-        new(rack_request: Rack::Request.new(rack_env), scope: scope)
+      def from_rack_env(rack_env, scope, resource = nil)
+        new(rack_request: Rack::Request.new(rack_env), scope: scope, resource: resource)
       end
     end
 
@@ -33,7 +33,7 @@ module CastleDevise
     # @param rack_request [Rack::Request]
     # @param resource [ActiveRecord::Base, nil]
     # @param scope [Symbol] Warden scope
-    def initialize(rack_request:, resource: nil, scope:)
+    def initialize(rack_request:, scope:, resource: nil)
       @rack_request = rack_request
       @resource = resource
       @scope = scope
