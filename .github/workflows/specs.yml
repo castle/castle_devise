@@ -11,8 +11,12 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.6.5
-    - name: Run the default task
+    - name: Run specs
       run: |
-        gem install bundler -v 2.2.15
+        gem install bundler -v 2.2.19
         bundle install
         bundle exec rake
+    - name: Simplecov Report
+      uses: aki77/simplecov-report-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
