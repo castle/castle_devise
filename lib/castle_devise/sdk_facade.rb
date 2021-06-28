@@ -67,9 +67,12 @@ module CastleDevise
           registered_at: format_time(context.registered_at),
           traits: context.user_traits
         }.compact,
-        request_token: context.request_token,
         context: payload_context(context.rack_request)
       }
+
+      # request_token is optional on the Log endpoint, but if it's sent it must
+      # be a valid Castle token
+      payload[:request_token] = context.request_token if context.request_token
 
       castle.log(payload)
     end

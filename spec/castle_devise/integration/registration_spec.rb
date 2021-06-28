@@ -3,10 +3,7 @@
 RSpec.describe "Registration attempt", type: :request do
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
 
-  before do
-    allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
-    allow(facade).to receive(:filter).and_return(castle_response)
-
+  def send_registration_request
     post "/users",
       params: {
         user: {email: "user@example.com", password: "123456", password_confirmation: "123456"},
@@ -14,8 +11,17 @@ RSpec.describe "Registration attempt", type: :request do
       }
   end
 
+  before do
+    allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
+  end
+
   describe "when Castle returns an allow verdict" do
     let(:castle_response) { allow_filter_response }
+
+    before do
+      allow(facade).to receive(:filter).and_return(castle_response)
+      send_registration_request
+    end
 
     it "sends requests to Castle" do
       expect(facade).to have_received(:filter) do |event:, context:|
@@ -34,6 +40,11 @@ RSpec.describe "Registration attempt", type: :request do
     let(:castle_response) { deny_filter_response }
 
     context "and monitoring mode is enabled" do
+      before do
+        allow(facade).to receive(:filter).and_return(castle_response)
+        send_registration_request
+      end
+
       around do |example|
         CastleDevise.configuration.monitoring_mode = true
         example.run
@@ -54,6 +65,11 @@ RSpec.describe "Registration attempt", type: :request do
     end
 
     context "and monitoring mode is disabled" do
+      before do
+        allow(facade).to receive(:filter).and_return(castle_response)
+        send_registration_request
+      end
+
       it "sends requests to Castle" do
         expect(facade).to have_received(:filter) do |event:, context:|
           expect(event).to eq("$registration")
@@ -73,6 +89,55 @@ RSpec.describe "Registration attempt", type: :request do
       it "redirects to the login page" do
         expect(response).to redirect_to("/users/sign_in")
       end
+    end
+  end
+
+  context "when Castle raises InvalidParametersError" do
+    before do
+      allow(facade).to receive(:filter).and_raise(Castle::InvalidParametersError)
+      send_registration_request
+    end
+
+    context "and monitoring mode is enabled" do
+      around do |example|
+        CastleDevise.configuration.monitoring_mode = true
+        example.run
+        CastleDevise.configuration.monitoring_mode = false
+      end
+
+      it "creates a user" do
+        expect(request.env["warden"].user(:user)).to be_persisted
+      end
+    end
+
+    context "and monitoring mode is disabled" do
+      it "does not create a user" do
+        expect(request.env["warden"].user(:user)).to be_nil
+      end
+
+      it "sets a flash message" do
+        expect(flash.alert).to match(/account cannot be created/i)
+      end
+
+      it "redirects to the login page" do
+        expect(response).to redirect_to("/users/sign_in")
+      end
+    end
+  end
+
+  context "when Castle raises a different error" do
+    before do
+      allow(facade).to receive(:filter).and_raise(Castle::Error)
+      allow(CastleDevise.logger).to receive(:error)
+      send_registration_request
+    end
+
+    it "logs the error" do
+      expect(CastleDevise.logger).to have_received(:error)
+    end
+
+    it "creates a user" do
+      expect(request.env["warden"].user(:user)).to be_persisted
     end
   end
 end

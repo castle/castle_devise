@@ -21,9 +21,21 @@ Warden::Manager.after_authentication do |resource, warden, opts|
       # high ATO risk, pretend the User does not exist
       context.logout!
     end
+  rescue Castle::InvalidParametersError
+    # TODO: We should act differently if the error is about missing/invalid request token
+    #   compared to any other validation errors. However, we can't do this with the
+    #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+    CastleDevise.logger.warn(
+      "[CastleDevise] /v1/risk request contained invalid parameters." \
+      " This might mean that either you didn't configure Castle's Javascript properly, or" \
+      " a request has been made without Javascript (eg. cURL/bot)." \
+      " Such a request is treated as if Castle responded with a 'deny' action in non-monitoring mode."
+    )
+
+    context.logout! unless CastleDevise.monitoring_mode?
   rescue Castle::Error => e
     # log API errors and allow
-    CastleDevise.logger.info e
+    CastleDevise.logger.error("[CastleDevise] risk($login): #{e}")
   end
 end
 
@@ -44,6 +56,6 @@ Warden::Manager.before_failure do |env, opts|
       context: context
     )
   rescue Castle::Error => e
-    CastleDevise.logger.info e
+    CastleDevise.logger.error("[CastleDevise] log($login, $failed): #{e}")
   end
 end
