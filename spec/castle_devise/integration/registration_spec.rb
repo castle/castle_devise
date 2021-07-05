@@ -30,6 +30,24 @@ RSpec.describe "Registration attempt", type: :request do
     allow(facade).to receive(:filter).and_return(castle_response)
   end
 
+  context "when registration hooks are disabled" do
+    around do |example|
+      User.castle_hooks[:before_registration] = false
+      example.run
+      User.castle_hooks[:before_registration] = true
+    end
+
+    before { send_registration_request }
+
+    it "does not send a request to Castle" do
+      expect(facade).not_to have_received(:filter)
+    end
+
+    it "creates a user" do
+      expect(request.env["warden"].user(:user)).to be_persisted
+    end
+  end
+
   context "when Castle returns an allow verdict" do
     let(:policy_action) { "allow" }
 

@@ -2,6 +2,7 @@
 
 Warden::Manager.after_authentication do |resource, warden, opts|
   next unless resource.devise_modules.include?(:castle_protectable)
+  next unless resource.class.castle_hooks[:after_login]
 
   context = CastleDevise::Context.from_warden(warden, resource, opts[:scope])
 
@@ -42,10 +43,11 @@ end
 Warden::Manager.before_failure do |env, opts|
   next if opts[:castle_devise] == :skip
 
-  resource_class = Devise.mappings[opts[:scope]]
+  resource_class = Devise.mappings[opts[:scope]].to
 
   next if resource_class.nil?
-  next unless resource_class.modules.include?(:castle_protectable)
+  next unless resource_class.devise_modules.include?(:castle_protectable)
+  next unless resource_class.castle_hooks[:after_login]
 
   context = CastleDevise::Context.from_rack_env(env, opts[:scope])
 

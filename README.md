@@ -135,3 +135,22 @@ end
 Please note that some Devise extensions might completely override `Devise::SessionsController#create`.
 In this case, you have to handle everything manually -  `castle_challenge?` should be called after
 a call to `warden.authenticate!` has been successful.
+
+#### Do not sent login/registration events
+
+You can configure CastleDevise not to send login or registration events for a given Devise model:
+
+```ruby
+class User < ApplicationRecord
+  devise :database_authenticatable, :registerable,
+         :castle_protectable,
+         castle_hooks: {
+           # set it to false to prevent CastleDevise
+           # from sending filter($login)
+           before_registration: true,
+           # set it to false to prevent CastleDevise from
+           # sending risk($login) and log($login, $failed)
+           after_login: true
+         }
+end
+```

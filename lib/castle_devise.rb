@@ -60,4 +60,15 @@ require_relative "castle_devise/patches/registrations_controller"
 
 require_relative "castle_devise/rails"
 
+# Monkey patching Devise module in order to add
+# additional configuration options
+module Devise
+  # Configures which events trigger Castle API calls
+  mattr_accessor :castle_hooks
+  @@castle_hooks = {
+    before_registration: true,
+    after_login: true
+  }
+end
+
 Devise.add_module :castle_protectable, model: "castle_devise/models/castle_protectable"
