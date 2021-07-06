@@ -42,13 +42,13 @@ module CastleDevise
     # Adds a new before_request hook
     # @param blk [Proc]
     def before_request(&blk)
-      @before_request_hooks << blk
+      before_request_hooks << blk
     end
 
     # Adds a new after_request hook
     # @param blk [Proc]
-    def after_request_hook(&blk)
-      @after_request_hooks << blk
+    def after_request(&blk)
+      after_request_hooks << blk
     end
   end
 end
