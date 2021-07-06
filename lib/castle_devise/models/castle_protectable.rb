@@ -4,8 +4,20 @@ module Devise
   module Models
     # This module contains methods that will be included in your Devise model when you
     # include the castle_protectable Devise module.
+    #
+    # Configuration:
+    #
+    #   castle_hooks: configures which events trigger Castle API calls
+    #     {
+    #       after_login: true, # trigger risk($login) and log($login, $failed),
+    #       before_registration: true # trigger filter($registration)
+    #     }
     module CastleProtectable
       extend ActiveSupport::Concern
+
+      module ClassMethods
+        Devise::Models.config(self, :castle_hooks)
+      end
 
       # @return [String, nil] ID used for sending requests to Castle
       def castle_id
