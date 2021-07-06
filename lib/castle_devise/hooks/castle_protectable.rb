@@ -4,7 +4,7 @@ Warden::Manager.after_authentication do |resource, warden, opts|
   next unless resource.devise_modules.include?(:castle_protectable)
   next unless resource.class.castle_hooks[:after_login]
 
-  context = CastleDevise::Context.from_warden(warden, resource, opts[:scope])
+  context = CastleDevise::Context.from_rack_env(warden.env, opts[:scope], resource)
 
   warden.env["castle_devise.risk_context"] = context
 

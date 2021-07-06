@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.castle.io/v1/filter
+    body:
+      encoding: UTF-8
+      string: '{"event":"$registration","user":{"email":"user@example.com"},"request_token":"3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg","context":{"headers":{"Content-Length":"0","Remote-Addr":"1.2.3.4"},"ip":"1.2.3.4","library":{"name":"castle-rb","version":"7.1.1"}},"timestamp":"2021-07-05T10:55:01.806Z","sent_at":"2021-07-05T10:55:01.807Z"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Authorization:
+      - "<AUTHORIZATION_HEADER>"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Mon, 05 Jul 2021 10:55:02 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-cache
+      Etag:
+      - W/"9498742a122d0a8c9cd08717bd93729d"
+      X-Request-Id:
+      - dc2e038b-6dbc-48a3-a02e-34051578d188
+      Server:
+      - castle.io
+    body:
+      encoding: UTF-8
+      string: '{"risk":0.74,"signals":{"datacenter_ip":{}},"policy":{"action":"allow","id":"987bd110-f958-4529-b4bd-af80232547c3","revision_id":"c39e4b97-1dad-4c28-875d-7728cf06052d","name":"Default"}}'
+  recorded_at: Mon, 05 Jul 2021 10:55:02 GMT
+recorded_with: VCR 6.0.0

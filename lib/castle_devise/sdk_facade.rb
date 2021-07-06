@@ -23,7 +23,7 @@ module CastleDevise
           email: context.email
         },
         request_token: context.request_token,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       )
     end
 
@@ -43,7 +43,7 @@ module CastleDevise
           traits: context.user_traits
         },
         request_token: context.request_token,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       }
 
       payload[:user][:name] = context.username if context.username
@@ -67,7 +67,7 @@ module CastleDevise
           registered_at: format_time(context.registered_at),
           traits: context.user_traits
         }.compact,
-        context: Castle::Context::Prepare.call(context.rack_request)
+        context: payload_context(context.rack_request)
       }
 
       # request_token is optional on the Log endpoint, but if it's sent it must
@@ -78,6 +78,18 @@ module CastleDevise
     end
 
     private
+
+    # @param rack_request [Rack::Request]
+    # @return [Hash]
+    def payload_context(rack_request)
+      ctx = Castle::Context::Prepare.call(rack_request)
+
+      # Castle SDK still generates some legacy parameters which can be removed
+      # when sending requests to the new Castle endpoints
+      ctx.slice!(:headers, :ip, :library)
+
+      ctx
+    end
 
     # @param time [Time, nil]
     # @return [String, nil]
