@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe CastleDevise::SdkFacade do
-  subject(:facade) { CastleDevise::SdkFacade.new(Castle::Client.new) }
+  subject(:facade) { CastleDevise::SdkFacade.new(castle, before_hooks, after_hooks) }
 
-  let(:event) { "$registration" }
   let(:rack_params) do
     {
       "user" => {"email" => "user@example.com", "password" => "password"},
@@ -22,73 +21,137 @@ RSpec.describe CastleDevise::SdkFacade do
   end
   let(:context) { CastleDevise::Context.from_rack_env(request.env, :user) }
 
-  describe "#filter" do
-    it "matches the API contract" do
-      VCR.use_cassette("castle_filter_api") do
-        response = facade.filter(event: event, context: context)
+  shared_examples "calls before- and after- hooks" do |method|
+    let(:castle) { instance_double(Castle::Client, method => castle_response) }
+    let(:before_hook) do
+      ->(meth, context, payload) do
+        payload[:test] = 1
+      end
+    end
+    let(:castle_response) { double }
+    let(:before_spy) { spy }
+    let(:after_spy) { spy }
+    let(:before_hooks) { [before_spy, before_hook] }
+    let(:after_hooks) { [after_spy] }
 
-        expect(response).to(
-          match(
-            hash_including(
-              risk: Float,
-              signals: Hash,
-              policy: {
-                action: String,
-                id: String,
-                revision_id: String,
-                name: String
-              }
-            )
-          )
-        )
+    it "calls before_hooks" do
+      expect(before_spy).to have_received(:call).with(method, context, Hash)
+    end
+
+    it "before_hook can modify the payload" do
+      expect(castle).to have_received(method).with(hash_including(test: 1))
+    end
+
+    it "calls after_hooks" do
+      expect(after_spy).to have_received(:call)
+        .with(method, context, Hash, castle_response)
+    end
+  end
+
+  describe "#filter" do
+    let(:event) { "$login" }
+
+    include_examples "calls before- and after- hooks", :filter do
+      before do
+        facade.filter(event: event, context: context)
       end
     end
   end
 
   describe "#risk" do
-    let(:user) do
-      User.create!(
-        email: "user@example.com",
-        password: "123456",
-        password_confirmation: "123456"
-      )
-    end
+    let(:event) { "$login" }
 
-    let(:context) { CastleDevise::Context.from_rack_env(request.env, :user, user) }
-
-    it "matches the API contract" do
-      VCR.use_cassette("castle_risk_api") do
-        response = facade.risk(event: event, context: context)
-
-        expect(response).to(
-          match(
-            hash_including(
-              risk: Float,
-              signals: Hash,
-              policy: {
-                action: String,
-                id: String,
-                revision_id: String,
-                name: String
-              },
-              device: {
-                token: String
-              }
-            )
-          )
-        )
+    include_examples "calls before- and after- hooks", :risk do
+      before do
+        facade.risk(event: event, context: context)
       end
     end
   end
 
   describe "#log" do
-    it "matches the API contract" do
-      VCR.use_cassette("castle_log_api") do
-        response = facade.log(event: event, status: "$failed", context: context)
+    let(:event) { "$login" }
 
-        # Response is empty & successful, these 2 fields come from the SDK
-        # meaning that there was no error and no failover action
-        expect(response).to eq(failover: false, failover_reason: nil)
+    include_examples "calls before- and after- hooks", :log do
+      before do
+        facade.log(event: event, status: "$failed", context: context)
+      end
+    end
+  end
+
+  context "VCR specs" do
+    let(:castle) { Castle::Client.new }
+    let(:before_hooks) { [] }
+    let(:after_hooks) { [] }
+    let(:event) { "$registration" }
+
+    describe "#filter" do
+      it "matches the API contract" do
+        VCR.use_cassette("castle_filter_api") do
+          response = facade.filter(event: event, context: context)
+
+          expect(response).to(
+            match(
+              hash_including(
+                risk: Float,
+                signals: Hash,
+                policy: {
+                  action: String,
+                  id: String,
+                  revision_id: String,
+                  name: String
+                }
+              )
+            )
+          )
+        end
+      end
+    end
+
+    describe "#risk" do
+      let(:user) do
+        User.create!(
+          email: "user@example.com",
+          password: "123456",
+          password_confirmation: "123456"
+        )
+      end
+
+      let(:context) { CastleDevise::Context.from_rack_env(request.env, :user, user) }
+
+      it "matches the API contract" do
+        VCR.use_cassette("castle_risk_api") do
+          response = facade.risk(event: event, context: context)
+
+          expect(response).to(
+            match(
+              hash_including(
+                risk: Float,
+                signals: Hash,
+                policy: {
+                  action: String,
+                  id: String,
+                  revision_id: String,
+                  name: String
+                },
+                device: {
+                  token: String
+                }
+              )
+            )
+          )
+        end
+      end
+    end
+
+    describe "#log" do
+      it "matches the API contract" do
+        VCR.use_cassette("castle_log_api") do
+          response = facade.log(event: event, status: "$failed", context: context)
+
+          # Response is empty & successful, these 2 fields come from the SDK
+          # meaning that there was no error and no failover action
+          expect(response).to eq(failover: false, failover_reason: nil)
+        end
       end
     end
   end

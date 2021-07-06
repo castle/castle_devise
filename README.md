@@ -154,3 +154,33 @@ class User < ApplicationRecord
          }
 end
 ```
+
+#### Intercept request/response
+
+You can register before- and after- request hooks in CastleDevise.
+
+```ruby
+CastleDevise.configure do |config|
+  # Add custom properties to the request but only when sending
+  #   requests to the Risk endpoint
+  # meth - Castle API endpoint (eg. :risk, :filter, :log)
+  # context - CastleDevise::Context
+  # payload - Hash (payload passed to the Castle SDK)
+  config.before_request do |meth, context, payload|
+    if meth == :risk
+      payload[:properties] = {
+        from_eu: context.resource.ip.from_eu?
+      }
+    end
+  end
+
+  config.before_request do |meth, context, payload|
+    # you can register multiple before_request hooks
+  end
+
+  # Intercept the response - enrich your logs with Castle signals
+  config.after_request do |meth, context, payload, response|
+    Logging.add_tags(response[:signals].keys)
+  end
+end
+```

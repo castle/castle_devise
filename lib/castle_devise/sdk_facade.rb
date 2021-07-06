@@ -7,8 +7,12 @@ module CastleDevise
     attr_reader :castle
 
     # @param castle [Castle::Client]
-    def initialize(castle)
+    # @param before_request_hooks [Array<Proc>]
+    # @param after_request_hooks [Array<Proc>]
+    def initialize(castle, before_request_hooks = [], after_request_hooks = [])
       @castle = castle
+      @before_request_hooks = before_request_hooks
+      @after_request_hooks = after_request_hooks
     end
 
     # Sends request to the /v1/filter endpoint.
@@ -17,14 +21,18 @@ module CastleDevise
     # @return [Hash] Raw API response
     # @see https://docs.castle.io/v1/reference/api-reference/#v1filter
     def filter(event:, context:)
-      castle.filter(
+      payload = {
         event: event,
         user: {
           email: context.email
         },
         request_token: context.request_token,
         context: payload_context(context.rack_request)
-      )
+      }
+
+      with_request_hooks(:filter, context, payload) do
+        castle.filter(payload)
+      end
     end
 
     # Sends request to the /v1/risk endpoint.
@@ -48,7 +56,9 @@ module CastleDevise
 
       payload[:user][:name] = context.username if context.username
 
-      castle.risk(payload)
+      with_request_hooks(:risk, context, payload) do
+        castle.risk(payload)
+      end
     end
 
     # Sends request to the /v1/log endpoint.
@@ -74,10 +84,14 @@ module CastleDevise
       # be a valid Castle token
       payload[:request_token] = context.request_token if context.request_token
 
-      castle.log(payload)
+      with_request_hooks(:log, context, payload) do
+        castle.log(payload)
+      end
     end
 
     private
+
+    attr_reader :before_request_hooks, :after_request_hooks
 
     # @param rack_request [Rack::Request]
     # @return [Hash]
@@ -95,6 +109,36 @@ module CastleDevise
     # @return [String, nil]
     def format_time(time)
       time&.utc&.iso8601(3)
+    end
+
+    # @param meth [Symbol] Castle API method
+    # @param context [CastleDevise::Context]
+    # @param payload [Hash] payload passed to the Castle Client
+    def with_request_hooks(meth, context, payload)
+      before_request(meth, context, payload)
+
+      yield.tap do |response|
+        after_request(meth, context, payload, response)
+      end
+    end
+
+    # @param meth [Symbol] Castle API method
+    # @param context [CastleDevise::Context]
+    # @param payload [Hash] payload passed to the Castle Client
+    def before_request(meth, context, payload)
+      before_request_hooks.each do |hook|
+        hook.call(meth, context, payload)
+      end
+    end
+
+    # @param meth [Symbol] Castle API method
+    # @param context [CastleDevise::Context]
+    # @param payload [Hash] payload passed to the Castle Client
+    # @param response [Hash] response received from Castle
+    def after_request(meth, context, payload, response)
+      after_request_hooks.each do |hook|
+        hook.call(meth, context, payload, response)
+      end
     end
   end
 end

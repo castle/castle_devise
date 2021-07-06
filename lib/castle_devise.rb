@@ -38,7 +38,11 @@ module CastleDevise
 
     # @return [CastleDevise::SdkFacade]
     def sdk_facade
-      @sdk_facade ||= CastleDevise::SdkFacade.new(castle)
+      @sdk_facade ||= CastleDevise::SdkFacade.new(
+        castle,
+        config.before_request_hooks,
+        config.after_request_hooks
+      )
     end
 
     # @return [Castle::Client]
