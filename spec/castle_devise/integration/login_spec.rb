@@ -25,6 +25,50 @@ RSpec.describe "Logging in", type: :request do
     allow(facade).to receive(:risk).and_return(castle_risk_response)
   end
 
+  context "when login hooks are disabled" do
+    around do |example|
+      User.castle_hooks[:after_login] = false
+      example.run
+      User.castle_hooks[:after_login] = true
+    end
+
+    context "with non-existing user" do
+      before do
+        allow(facade).to receive(:log)
+
+        send_sign_in_request("non-existing@example.com", "123456", "token123")
+      end
+
+      it "does not log the event" do
+        expect(facade).not_to have_received(:log)
+      end
+
+      it "is successful" do
+        expect(response).to be_successful
+      end
+    end
+
+    context "with existing user" do
+      before do
+        allow(facade).to receive(:risk)
+
+        send_sign_in_request(user.email, "123456", "token123")
+      end
+
+      it "does not send the event" do
+        expect(facade).not_to have_received(:risk)
+      end
+
+      it "authenticates the user" do
+        expect(request.env["warden"].user(:user)).to eq(user)
+      end
+
+      it "redirects" do
+        expect(response.status).to eq(302)
+      end
+    end
+  end
+
   context "with non-existing user" do
     before do
       allow(facade).to receive(:log)

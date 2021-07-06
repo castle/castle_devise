@@ -14,6 +14,8 @@ module CastleDevise
 
       # Sends a /v1/filter request to Castle
       def castle_filter
+        return unless resource_class.castle_hooks[:before_registration]
+
         response = CastleDevise.sdk_facade.filter(
           event: "$registration",
           context: CastleDevise::Context.from_rack_env(request.env, resource_name)
