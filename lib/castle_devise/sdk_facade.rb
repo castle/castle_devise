@@ -111,33 +111,33 @@ module CastleDevise
       time&.utc&.iso8601(3)
     end
 
-    # @param meth [Symbol] Castle API method
+    # @param action [Symbol] Castle API method
     # @param context [CastleDevise::Context]
     # @param payload [Hash] payload passed to the Castle Client
-    def with_request_hooks(meth, context, payload)
-      before_request(meth, context, payload)
+    def with_request_hooks(action, context, payload)
+      before_request(action, context, payload)
 
       yield.tap do |response|
-        after_request(meth, context, payload, response)
+        after_request(action, context, payload, response)
       end
     end
 
-    # @param meth [Symbol] Castle API method
+    # @param action [Symbol] Castle API method
     # @param context [CastleDevise::Context]
     # @param payload [Hash] payload passed to the Castle Client
-    def before_request(meth, context, payload)
+    def before_request(action, context, payload)
       before_request_hooks.each do |hook|
-        hook.call(meth, context, payload)
+        hook.call(action, context, payload)
       end
     end
 
-    # @param meth [Symbol] Castle API method
+    # @param action [Symbol] Castle API method
     # @param context [CastleDevise::Context]
     # @param payload [Hash] payload passed to the Castle Client
     # @param response [Hash] response received from Castle
-    def after_request(meth, context, payload, response)
+    def after_request(action, context, payload, response)
       after_request_hooks.each do |hook|
-        hook.call(meth, context, payload, response)
+        hook.call(action, context, payload, response)
       end
     end
   end
