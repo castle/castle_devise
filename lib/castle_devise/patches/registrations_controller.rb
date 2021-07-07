@@ -25,6 +25,7 @@ module CastleDevise
 
         case response.dig(:policy, :action)
         when "deny"
+          set_flash_message!(:alert, "blocked_by_castle")
           flash.alert = "Account cannot be created at this moment. Please try again later."
           redirect_to new_session_path(resource_name)
           false
@@ -43,7 +44,7 @@ module CastleDevise
         )
 
         unless CastleDevise.monitoring_mode?
-          flash.alert = "Account cannot be created at this moment. Please try again later."
+          set_flash_message!(:alert, "blocked_by_castle")
           redirect_to new_session_path(resource_name)
           false
         end
