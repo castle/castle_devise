@@ -30,5 +30,25 @@ module CastleDevise
     # @!attribute logger
     #   @return [Logger] A Logger instance. You might want to use Rails.logger here.
     config_accessor(:logger) { Logger.new("/dev/null") }
+
+    # @!attribute before_request_hooks
+    #   @return [Array<Proc>] Array of procs that will get called before a request to the Castle API
+    config_accessor(:before_request_hooks) { [] }
+
+    # @!attribute after_request_hooks
+    #   @return [Array<Proc>] Array of procs that will get called after a request to the Castle API
+    config_accessor(:after_request_hooks) { [] }
+
+    # Adds a new before_request hook
+    # @param blk [Proc]
+    def before_request(&blk)
+      before_request_hooks << blk
+    end
+
+    # Adds a new after_request hook
+    # @param blk [Proc]
+    def after_request(&blk)
+      after_request_hooks << blk
+    end
   end
 end
