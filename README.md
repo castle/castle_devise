@@ -85,9 +85,19 @@ You're set! Now verify that everything works by logging in to your application a
 
 #### Further steps if you're using Webpacker
 
-Add `castle.js` to your package.json file.
+Add `castle.js` to your package.json file:
 
-TODO: fill this in.
+```
+yarn add castle.js
+```
+
+Require castle.js in your application pack:
+
+```javascript
+require("castle.js");
+
+_castle("setAppId", YOUR_APPLICATION_ID);
+```
 
 
 ## How-Tos
