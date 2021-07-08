@@ -2,16 +2,21 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in castle-devise.gemspec
+# Specify your gem"s dependencies in castle-devise.gemspec
 gemspec
 
 gem "activerecord"
+gem "actionmailer"
 gem "railties", "~> 5.2"
 gem "rake"
-gem "rspec"
-gem "rspec-rails"
-gem "simplecov"
 gem "standard"
 gem "sqlite3"
 gem "vcr"
-gem "webmock"
+
+group :development do
+  gem "byebug"
+  gem "rspec"
+  gem "rspec-rails"
+  gem "simplecov"
+  gem "webmock"
+end
