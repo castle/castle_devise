@@ -173,7 +173,10 @@ class User < ApplicationRecord
            before_registration: true,
            # set it to false to prevent CastleDevise from
            # sending risk($login) and log($login, $failed)
-           after_login: true
+           after_login: true,
+           # set it to false to prevent CastleDevise from
+           # sending log($password_reset_request)
+           after_password_reset_request: true
          }
 end
 ```

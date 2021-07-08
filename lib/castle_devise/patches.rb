@@ -7,6 +7,7 @@ module CastleDevise
       # @api private
       def apply
         Devise::RegistrationsController.send(:include, Patches::RegistrationsController)
+        Devise::PasswordsController.send(:prepend, Patches::PasswordsController)
       end
     end
   end
