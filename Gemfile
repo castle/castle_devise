@@ -6,6 +6,8 @@ source "https://rubygems.org"
 gemspec
 
 gem "activerecord"
+gem "actionmailer"
+gem "byebug"
 gem "railties", "~> 5.2"
 gem "rake"
 gem "rspec"

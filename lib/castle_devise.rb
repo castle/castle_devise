@@ -60,8 +60,8 @@ require_relative "castle_devise/controllers/helpers"
 require_relative "castle_devise/helpers/castle_helper"
 require_relative "castle_devise/hooks/castle_protectable"
 require_relative "castle_devise/models/castle_protectable"
+require_relative "castle_devise/patches/passwords_controller"
 require_relative "castle_devise/patches/registrations_controller"
-
 require_relative "castle_devise/rails"
 
 # Monkey patching Devise module in order to add
@@ -71,7 +71,8 @@ module Devise
   mattr_accessor :castle_hooks
   @@castle_hooks = {
     before_registration: true,
-    after_login: true
+    after_login: true,
+    after_password_reset_request: true
   }
 end
 
