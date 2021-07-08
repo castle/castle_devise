@@ -49,6 +49,17 @@ class User < ApplicationRecord
 end
 ```
 
+Add an additional translation to your `config/locales/devise.en.yml`:
+
+```yml
+en:
+  devise:
+    registrations:
+      blocked_by_castle: "Account cannot be created at this moment. Please try again later."
+```
+
+(See [devise.en.yml in our specs](spec/dummy_app/config/locales/devise.en.yml#L40))
+
 #### Further steps if you're not using Webpacker
 
 Include Castle's c.js script in the head section of your layout:
