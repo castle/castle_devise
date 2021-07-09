@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem"s dependencies in castle-devise.gemspec
+# Specify your gem's dependencies in castle-devise.gemspec
 gemspec
 
 gem "activerecord"
