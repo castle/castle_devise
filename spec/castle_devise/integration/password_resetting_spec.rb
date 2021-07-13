@@ -18,8 +18,6 @@ RSpec.describe "Password reset request", type: :request do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
 
     allow(facade).to receive(:log)
-
-    send_password_reset_request
   end
 
   context "when password reset hooks are disabled" do
@@ -28,6 +26,8 @@ RSpec.describe "Password reset request", type: :request do
       example.run
       User.castle_hooks[:after_password_reset_request] = true
     end
+
+    before { send_password_reset_request }
 
     context "with non-existing user" do
       let(:email) { "non-existing-user@example.com" }
@@ -58,6 +58,8 @@ RSpec.describe "Password reset request", type: :request do
     context "with non-existing user" do
       let(:email) { "non-existing-user@example.com" }
 
+      before { send_password_reset_request }
+
       it "logs password_reset_requested event with failed status" do
         expect(facade).to have_received(:log) do |event:, status:, context:|
           expect(event).to eq("$password_reset_requested")
@@ -74,12 +76,34 @@ RSpec.describe "Password reset request", type: :request do
     context "with existing user" do
       let(:email) { "user@example.com" }
 
+      before { send_password_reset_request }
+
       it "logs password_reset_requested event with succeeded status" do
         expect(facade).to have_received(:log) do |event:, status:, context:|
           expect(event).to eq("$password_reset_requested")
           expect(status).to eq("$succeeded")
           expect(context.email).to eq(email)
         end
+      end
+
+      it "sets reset_password_sent_at on user" do
+        expect(user.reload.reset_password_sent_at).not_to eq(nil)
+      end
+    end
+
+    context "when Castle raises error" do
+      let(:email) { "user@example.com" }
+
+      before do
+        allow(facade).to receive(:log).and_raise(Castle::Error)
+
+        allow(CastleDevise.logger).to receive(:error)
+
+        send_password_reset_request
+      end
+
+      it "logs the error" do
+        expect(CastleDevise.logger).to have_received(:error)
       end
 
       it "sets reset_password_sent_at on user" do
