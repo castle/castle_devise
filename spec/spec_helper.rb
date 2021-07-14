@@ -15,7 +15,10 @@ Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f 
 
 Rails.backtrace_cleaner.remove_silencers!
 
-ActiveRecord::MigrationContext.new(File.expand_path("../dummy_app/db/migrate", __FILE__)).migrate
+ActiveRecord::MigrationContext.new(
+  File.expand_path("../dummy_app/db/migrate", __FILE__),
+  ActiveRecord::SchemaMigration
+).migrate
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

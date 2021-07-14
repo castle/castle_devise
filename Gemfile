@@ -6,7 +6,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "activerecord"
-gem "railties", "~> 5.2"
+gem "railties", "~> 6.1"
 gem "rake"
 gem "rspec"
 gem "rspec-rails"
