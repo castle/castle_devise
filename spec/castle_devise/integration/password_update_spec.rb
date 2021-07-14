@@ -2,15 +2,8 @@
 
 RSpec.describe "Password update", type: :request do
   subject(:send_password_update) do
-    # First, we need to sign in so we can update the password next
-    post "/users/sign_in",
-      params: {
-        user: {
-          email: email,
-          password: password
-        },
-        castle_request_token: request_token
-      }
+    # First, we need to sign in so we can update the password in the next step
+    send_sign_in_request(email, password, request_token)
 
     put "/users",
       params: {
@@ -62,7 +55,7 @@ RSpec.describe "Password update", type: :request do
     it "does not use risk action for the profile_update event" do
       expect(facade).not_to have_received(:risk).with(
         event: "$profile_update",
-        context: have_attributes(email: email)
+        context: have_attributes(email: email, resource: user)
       )
     end
 
@@ -93,7 +86,7 @@ RSpec.describe "Password update", type: :request do
         it "performs risk action with profile_update event" do
           expect(facade).to have_received(:risk).with(
             event: "$profile_update",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
 
@@ -101,19 +94,8 @@ RSpec.describe "Password update", type: :request do
           expect(facade).to have_received(:log).with(
             event: "$profile_update",
             status: "$succeeded",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
-        end
-
-        it "keeps the user authenticated" do
-          expect(request.env["warden"].user(:user)).to eq(user)
-        end
-
-        it "stores context and response in Rack env" do
-          expect(request.env["castle_devise.risk_response"])
-            .to eq(profile_update_castle_risk_response)
-
-          expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
         end
       end
 
@@ -127,7 +109,7 @@ RSpec.describe "Password update", type: :request do
         it "performs risk action with profile_update event" do
           expect(facade).to have_received(:risk).with(
             event: "$profile_update",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
 
@@ -135,7 +117,7 @@ RSpec.describe "Password update", type: :request do
           expect(facade).to have_received(:log).with(
             event: "$profile_update",
             status: "$failed",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
       end
@@ -152,7 +134,7 @@ RSpec.describe "Password update", type: :request do
         it "performs risk action with profile_update event" do
           expect(facade).to have_received(:risk).with(
             event: "$profile_update",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
 
@@ -160,19 +142,12 @@ RSpec.describe "Password update", type: :request do
           expect(facade).to have_received(:log).with(
             event: "$profile_update",
             status: "$succeeded",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
 
         it "keeps the user authenticated" do
           expect(request.env["warden"].user(:user)).to eq(user)
-        end
-
-        it "stores context and response in Rack env" do
-          expect(request.env["castle_devise.risk_response"])
-            .to eq(profile_update_castle_risk_response)
-
-          expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
         end
       end
 
@@ -186,7 +161,7 @@ RSpec.describe "Password update", type: :request do
         it "performs risk action with profile_update event" do
           expect(facade).to have_received(:risk).with(
             event: "$profile_update",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
 
@@ -194,7 +169,7 @@ RSpec.describe "Password update", type: :request do
           expect(facade).to have_received(:log).with(
             event: "$profile_update",
             status: "$failed",
-            context: have_attributes(email: email)
+            context: have_attributes(email: email, resource: user)
           )
         end
       end
@@ -203,25 +178,15 @@ RSpec.describe "Password update", type: :request do
     context "when Castle returns deny action" do
       let(:profile_update_castle_risk_response) { deny_risk_response }
 
-      it "does not update the password" do
-        expect(user.reload.valid_password?(password)).to eq(true)
+      it "updates the password" do
+        expect(user.reload.valid_password?(new_password)).to eq(true)
       end
 
       it "performs risk action with profile_update event" do
         expect(facade).to have_received(:risk).with(
           event: "$profile_update",
-          context: have_attributes(email: email)
+          context: have_attributes(email: email, resource: user)
         )
-      end
-
-      it "logs out the user" do
-        expect(request.env["warden"].user(:user)).to be_nil
-      end
-
-      it "stores context and response in Rack env" do
-        expect(request.env["castle_devise.risk_response"])
-          .to eq(profile_update_castle_risk_response)
-        expect(request.env["castle_devise.risk_context"]).to be_a(CastleDevise::Context)
       end
     end
   end
@@ -238,16 +203,8 @@ RSpec.describe "Password update", type: :request do
         send_password_update
       end
 
-      it "logs out the user" do
-        expect(request.env["warden"].user(:user)).to be_nil
-      end
-
-      it "sets a flash message" do
-        expect(flash.alert).to match(/invalid email or password/i)
-      end
-
-      it "does not update the password" do
-        expect(user.reload.valid_password?(password)).to eq(true)
+      it "updates the password" do
+        expect(user.reload.valid_password?(new_password)).to eq(true)
       end
     end
 

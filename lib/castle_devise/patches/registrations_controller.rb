@@ -19,21 +19,13 @@ module CastleDevise
       def update
         context = CastleDevise::Context.from_rack_env(request.env, scope_name, resource)
 
-        warden.env["castle_devise.risk_context"] = context
-
         if resource_class.castle_hooks[:profile_update]
           begin
-            response = CastleDevise.sdk_facade.risk(
+            # TODO: Implement a verification mechanism for this action.
+            CastleDevise.sdk_facade.risk(
               event: "$profile_update",
               context: context
             )
-
-            warden.env["castle_devise.risk_response"] = response
-
-            if response.dig(:policy, :action) == "deny"
-              # high ATO risk, pretend the User does not exist
-              context.logout!
-            end
           rescue Castle::InvalidParametersError
             # TODO: We should act differently if the error is about missing/invalid request token
             #   compared to any other validation errors. However, we can't do this with the
@@ -45,8 +37,6 @@ module CastleDevise
               " Such a request is treated as if Castle responded with a 'deny' action in" \
               " non-monitoring mode."
             )
-
-            context.logout!
           rescue Castle::Error => e
             # log API errors and allow
             CastleDevise.logger.error("[CastleDevise] risk($profile_update): #{e}")

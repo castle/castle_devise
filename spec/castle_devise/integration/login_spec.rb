@@ -12,14 +12,6 @@ RSpec.describe "Logging in", type: :request do
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
   let(:castle_risk_response) { allow_risk_response }
 
-  def send_sign_in_request(email, password, request_token)
-    post "/users/sign_in",
-      params: {
-        user: {email: email, password: password},
-        castle_request_token: request_token
-      }
-  end
-
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
     allow(facade).to receive(:risk).and_return(castle_risk_response)

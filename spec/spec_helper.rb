@@ -26,6 +26,7 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
   config.include ResponseHelper
+  config.include RequestsHelper
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
