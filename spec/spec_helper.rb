@@ -24,9 +24,9 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = true
 
-  config.include Warden::Test::Helpers
+  config.include Devise::Test::IntegrationHelpers
   config.include ResponseHelper
-  config.include RequestsHelper
+  config.include Warden::Test::Helpers
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!

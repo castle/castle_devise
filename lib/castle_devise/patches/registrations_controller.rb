@@ -24,6 +24,7 @@ module CastleDevise
             # TODO: Implement a verification mechanism for this action.
             CastleDevise.sdk_facade.risk(
               event: "$profile_update",
+              status: "$attempted",
               context: context
             )
           rescue Castle::InvalidParametersError

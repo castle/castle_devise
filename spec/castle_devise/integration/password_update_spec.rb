@@ -2,9 +2,6 @@
 
 RSpec.describe "Password update", type: :request do
   subject(:send_password_update) do
-    # First, we need to sign in so we can update the password in the next step
-    send_sign_in_request(email, password, request_token)
-
     put "/users",
       params: {
         email: email,
@@ -34,6 +31,9 @@ RSpec.describe "Password update", type: :request do
   let(:profile_update_castle_risk_response) { allow_risk_response }
 
   before do
+    # First, we need to sign in so we can update the password in the next step
+    sign_in(user)
+
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
 
     allow(facade).to receive(:log)
@@ -55,6 +55,7 @@ RSpec.describe "Password update", type: :request do
     it "does not use risk action for the profile_update event" do
       expect(facade).not_to have_received(:risk).with(
         event: "$profile_update",
+        status: "$attempted",
         context: have_attributes(email: email, resource: user)
       )
     end
@@ -77,107 +78,7 @@ RSpec.describe "Password update", type: :request do
       send_password_update
     end
 
-    context "when Castle returns allow action" do
-      context "when password successfully changed" do
-        it "updates the password" do
-          expect(user.reload.valid_password?(new_password)).to eq(true)
-        end
-
-        it "performs risk action with profile_update event" do
-          expect(facade).to have_received(:risk).with(
-            event: "$profile_update",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-
-        it "logs profile_update event with succeeded status" do
-          expect(facade).to have_received(:log).with(
-            event: "$profile_update",
-            status: "$succeeded",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-      end
-
-      context "when password failed to change" do
-        let(:current_password) { "abcdef" }
-
-        it "does not update the password" do
-          expect(user.reload.valid_password?(password)).to eq(true)
-        end
-
-        it "performs risk action with profile_update event" do
-          expect(facade).to have_received(:risk).with(
-            event: "$profile_update",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-
-        it "logs profile_update event with failed status" do
-          expect(facade).to have_received(:log).with(
-            event: "$profile_update",
-            status: "$failed",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-      end
-    end
-
-    context "when Castle returns challenge action" do
-      let(:profile_update_castle_risk_response) { challenge_risk_response }
-
-      context "when password successfully changed" do
-        it "updates the password" do
-          expect(user.reload.valid_password?(new_password)).to eq(true)
-        end
-
-        it "performs risk action with profile_update event" do
-          expect(facade).to have_received(:risk).with(
-            event: "$profile_update",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-
-        it "logs profile_update event with succeeded status" do
-          expect(facade).to have_received(:log).with(
-            event: "$profile_update",
-            status: "$succeeded",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-
-        it "keeps the user authenticated" do
-          expect(request.env["warden"].user(:user)).to eq(user)
-        end
-      end
-
-      context "when password failed to change" do
-        let(:current_password) { "abcdef" }
-
-        it "does not update the password" do
-          expect(user.reload.valid_password?(password)).to eq(true)
-        end
-
-        it "performs risk action with profile_update event" do
-          expect(facade).to have_received(:risk).with(
-            event: "$profile_update",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-
-        it "logs profile_update event with failed status" do
-          expect(facade).to have_received(:log).with(
-            event: "$profile_update",
-            status: "$failed",
-            context: have_attributes(email: email, resource: user)
-          )
-        end
-      end
-    end
-
-    context "when Castle returns deny action" do
-      let(:profile_update_castle_risk_response) { deny_risk_response }
-
+    context "when password successfully changed" do
       it "updates the password" do
         expect(user.reload.valid_password?(new_password)).to eq(true)
       end
@@ -185,6 +86,39 @@ RSpec.describe "Password update", type: :request do
       it "performs risk action with profile_update event" do
         expect(facade).to have_received(:risk).with(
           event: "$profile_update",
+          status: "$attempted",
+          context: have_attributes(email: email, resource: user)
+        )
+      end
+
+      it "logs profile_update event with succeeded status" do
+        expect(facade).to have_received(:log).with(
+          event: "$profile_update",
+          status: "$succeeded",
+          context: have_attributes(email: email, resource: user)
+        )
+      end
+    end
+
+    context "when password failed to change" do
+      let(:current_password) { "abcdef" }
+
+      it "does not update the password" do
+        expect(user.reload.valid_password?(password)).to eq(true)
+      end
+
+      it "performs risk action with profile_update event" do
+        expect(facade).to have_received(:risk).with(
+          event: "$profile_update",
+          status: "$attempted",
+          context: have_attributes(email: email, resource: user)
+        )
+      end
+
+      it "logs profile_update event with failed status" do
+        expect(facade).to have_received(:log).with(
+          event: "$profile_update",
+          status: "$failed",
           context: have_attributes(email: email, resource: user)
         )
       end
@@ -223,10 +157,6 @@ RSpec.describe "Password update", type: :request do
 
       it "logs the error" do
         expect(CastleDevise.logger).to have_received(:error)
-      end
-
-      it "keeps the user authenticated" do
-        expect(request.env["warden"].user(:user)).to eq(user)
       end
 
       it "updates the password" do
