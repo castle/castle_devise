@@ -7,7 +7,6 @@ gemspec
 
 gem "activerecord"
 gem "actionmailer"
-gem "actionmailer"
 gem "byebug"
 gem "railties", "~> 5.2"
 gem "rake"

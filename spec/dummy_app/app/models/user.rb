@@ -6,7 +6,7 @@ class User < ApplicationRecord
     :castle_protectable, castle_hooks: {
       after_login: true,
       after_password_reset_request: true,
-      profile_update: true,
-      before_registration: true
+      before_registration: true,
+      profile_update: true
     }
 end
