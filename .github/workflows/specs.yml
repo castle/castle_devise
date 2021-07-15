@@ -6,9 +6,16 @@ jobs:
   build:
     environment: tests
     runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: false
       matrix:
-        ruby: [2.6, 2.7, 3.0]
+        ruby: ["2.6", "2.7", "3.0"]
+        rails: ["5.2", "6.0", "6.1"]
+        exclude:
+          - ruby: "3.0"
+            rails: "5.2"
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby ${{ matrix.ruby }}
@@ -16,16 +23,21 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
     - name: Install depenencies
+      env:
+        BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
       run: |
         gem update --system
-        gem install bundler
+        bundle config path vendor/bundle
         bundle install
     - name: Run specs
+      env:
+        BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
+        CASTLE_API_SECRET: ${{ secrets.CASTLE_API_SECRET }}
       run: |
         bundle exec rake
-      env:
-        CASTLE_API_SECRET: ${{ secrets.CASTLE_API_SECRET }}
     - name: Simplecov Report
+      if:
+        ${{ matrix.rails == '6.1' && matrix.ruby >= '3.0' }}
       uses: aki77/simplecov-report-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
