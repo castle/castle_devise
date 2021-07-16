@@ -27,9 +27,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Uncomment to register a new dependency of your gem
-  spec.add_dependency "castle-rb", ">= 7.0", "< 8.0"
   spec.add_dependency "activesupport", ">= 5.0"
+  spec.add_dependency "castle-rb", ">= 7.0", "< 8.0"
+  spec.add_dependency "devise", ">= 4.3.0", "< 5.0"
 
-  spec.add_runtime_dependency "devise", ">= 4.3.0", "< 5.0"
+  spec.add_development_dependency "appraisal", "~> 2.3.0"
 end
