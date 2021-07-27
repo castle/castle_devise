@@ -100,26 +100,32 @@ RSpec.describe CastleDevise::SdkFacade do
           }
         end
 
-        it "sends the proper value" do
+        it "performs the request to log with all the user's attributes" do
           expect(castle).to have_received(:log).with(
             hash_including(user: expected_user_params)
           )
         end
       end
 
-      context "when user given as rack request params" do
+      context "when user given as rack request params and email is present" do
         let(:expected_user_params) do
           {
-            email: user_email,
-            id: nil,
-            traits: {}
+            email: user_email
           }
         end
 
-        it "does not include registered_at filled in the payload" do
+        it "performs the request to log with user's email only" do
           expect(castle).to have_received(:log).with(
             hash_including(user: expected_user_params)
           )
+        end
+      end
+
+      context "when user given as rack request params and email is not present" do
+        let(:user_email) { nil }
+
+        it "does not perform the request to log" do
+          expect(castle).not_to have_received(:log)
         end
       end
     end
