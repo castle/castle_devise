@@ -74,12 +74,13 @@ module CastleDevise
         user: {
           id: context.castle_id,
           email: context.email,
-          registered_at: format_time(context.registered_at),
           traits: context.user_traits
-        }.compact,
+        },
         context: payload_context(context.rack_request)
       }
 
+      # registered_at field needs to be a correct value or cannot be sent out at all
+      payload[:user][:registered_at] = format_time(context.registered_at) if context.registered_at
       # request_token is optional on the Log endpoint, but if it's sent it must
       # be a valid Castle token
       payload[:request_token] = context.request_token if context.request_token

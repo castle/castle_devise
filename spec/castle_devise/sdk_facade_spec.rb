@@ -3,9 +3,12 @@
 RSpec.describe CastleDevise::SdkFacade do
   subject(:facade) { CastleDevise::SdkFacade.new(castle, before_hooks, after_hooks) }
 
+  let(:user_email) { "user@example.com" }
+  let(:user_password) { "password" }
+  let(:user_rack_params) { {"email" => user_email, "password" => user_password} }
   let(:rack_params) do
     {
-      "user" => {"email" => "user@example.com", "password" => "password"},
+      "user" => user_rack_params,
       "castle_request_token" => "3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg"
     }
   end
@@ -76,6 +79,50 @@ RSpec.describe CastleDevise::SdkFacade do
         facade.log(event: event, status: "$failed", context: context)
       end
     end
+
+    describe "user's params" do
+      context "when user given as resource" do
+        let!(:user) do
+          User.create!(
+            email: user_email,
+            password: user_password,
+            password_confirmation: user_password
+          )
+        end
+        let(:context) { CastleDevise::Context.from_rack_env(request.env, :user, user) }
+        let(:user_rack_params) { {} }
+        let(:expected_user_params) do
+          {
+            email: user_email,
+            id: user.id.to_s,
+            registered_at: user.created_at.utc.iso8601(3),
+            traits: {}
+          }
+        end
+
+        it "sends the proper value" do
+          expect(castle).to have_received(:log).with(
+            hash_including(user: expected_user_params)
+          )
+        end
+      end
+
+      context "when user given as rack request params" do
+        let(:expected_user_params) do
+          {
+            email: user_email,
+            id: nil,
+            traits: {}
+          }
+        end
+
+        it "does not include registered_at filled in the payload" do
+          expect(castle).to have_received(:log).with(
+            hash_including(user: expected_user_params)
+          )
+        end
+      end
+    end
   end
 
   context "VCR specs" do
@@ -110,9 +157,9 @@ RSpec.describe CastleDevise::SdkFacade do
     describe "#risk" do
       let(:user) do
         User.create!(
-          email: "user@example.com",
-          password: "123456",
-          password_confirmation: "123456"
+          email: user_email,
+          password: user_password,
+          password_confirmation: user_password
         )
       end
 
