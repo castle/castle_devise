@@ -14,7 +14,7 @@ RSpec.describe "Password update", type: :request do
       }
   end
 
-  let(:facade) { instance_double(CastleDevise::SdkFacade) }
+  let(:facade) { instance_spy(CastleDevise::SdkFacade) }
   let(:request_token) { "token123" }
   let(:email) { "user@example.com" }
   let(:password) { "123456" }
@@ -35,8 +35,6 @@ RSpec.describe "Password update", type: :request do
     sign_in(user)
 
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
-
-    allow(facade).to receive(:log)
   end
 
   context "when profile update hooks are disabled" do
