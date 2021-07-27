@@ -32,7 +32,7 @@ RSpec.describe "Password reset request", type: :request do
     context "with non-existing user" do
       let(:email) { "non-existing-user@example.com" }
 
-      it "does not log the password_reset_requested event" do
+      it "does not log the password_reset_request event" do
         expect(facade).not_to have_received(:log)
       end
 
@@ -44,7 +44,7 @@ RSpec.describe "Password reset request", type: :request do
     context "with existing user" do
       let(:email) { "user@example.com" }
 
-      it "does not log the password_reset_requested event" do
+      it "does not log the password_reset_request event" do
         expect(facade).not_to have_received(:log)
       end
 
@@ -60,9 +60,9 @@ RSpec.describe "Password reset request", type: :request do
 
       before { send_password_reset_request }
 
-      it "logs password_reset_requested event with failed status" do
+      it "logs password_reset_request event with failed status" do
         expect(facade).to have_received(:log) do |event:, status:, context:|
-          expect(event).to eq("$password_reset_requested")
+          expect(event).to eq("$password_reset_request")
           expect(status).to eq("$failed")
           expect(context.email).to eq(email)
         end
@@ -78,9 +78,9 @@ RSpec.describe "Password reset request", type: :request do
 
       before { send_password_reset_request }
 
-      it "logs password_reset_requested event with succeeded status" do
+      it "logs password_reset_request event with succeeded status" do
         expect(facade).to have_received(:log) do |event:, status:, context:|
-          expect(event).to eq("$password_reset_requested")
+          expect(event).to eq("$password_reset_request")
           expect(status).to eq("$succeeded")
           expect(context.email).to eq(email)
         end

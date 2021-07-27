@@ -15,13 +15,13 @@ module CastleDevise
 
           begin
             CastleDevise.sdk_facade.log(
-              event: "$password_reset_requested",
+              event: "$password_reset_request",
               status: resource.persisted? ? "$succeeded" : "$failed",
               context: CastleDevise::Context.from_rack_env(request.env, scope_name, resource)
             )
           rescue Castle::Error => e
             # log API errors and pass-through it
-            CastleDevise.logger.error("[CastleDevise] log($password_reset_requested): #{e}")
+            CastleDevise.logger.error("[CastleDevise] log($password_reset_request): #{e}")
           end
         end
       end
