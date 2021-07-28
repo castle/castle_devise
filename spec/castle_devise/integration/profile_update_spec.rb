@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe "Password update", type: :request do
-  subject(:send_password_update) do
+RSpec.describe "Profile update", type: :request do
+  subject(:send_profile_update) do
     put "/users",
       params: {
         email: email,
@@ -47,7 +47,7 @@ RSpec.describe "Password update", type: :request do
     before do
       allow(facade).to receive(:risk).and_return(login_castle_risk_response)
 
-      send_password_update
+      send_profile_update
     end
 
     it "does not use risk action for the profile_update event" do
@@ -73,7 +73,7 @@ RSpec.describe "Password update", type: :request do
         login_castle_risk_response, profile_update_castle_risk_response
       )
 
-      send_password_update
+      send_profile_update
     end
 
     context "when password successfully changed" do
@@ -132,7 +132,7 @@ RSpec.describe "Password update", type: :request do
           call_risk_count >= 2 ? raise(Castle::InvalidParametersError) : login_castle_risk_response
         end
 
-        send_password_update
+        send_profile_update
       end
 
       it "updates the password" do
@@ -150,7 +150,7 @@ RSpec.describe "Password update", type: :request do
 
         allow(CastleDevise.logger).to receive(:error)
 
-        send_password_update
+        send_profile_update
       end
 
       it "logs the error" do

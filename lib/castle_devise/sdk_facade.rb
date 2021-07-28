@@ -41,7 +41,7 @@ module CastleDevise
     # @param context [CastleDevise::Context]
     # @return [Hash] Raw API response
     # @see https://docs.castle.io/v1/reference/api-reference/#v1risk
-    def risk(event:, status: "$succeeded", context:)
+    def risk(event:, context:, status: "$succeeded")
       payload = {
         event: event,
         status: status,
