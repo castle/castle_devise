@@ -2,9 +2,9 @@
 
 ## [Unreleased][main]
 
+- Add Risk action for $profile_update event with $attempted status and Log action for $profile_update event with $succeeded and $failed statuses
+- Add Log action for $password_reset_request event with $succeeded and $failed statuses
 - Run specs in multiple ruby and rails versions.
-
-- Add $password_reset_request event with $succeeded and $failed statuses
 
 ## [0.1.0] - 2021-07-08
 

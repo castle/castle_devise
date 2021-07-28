@@ -12,6 +12,9 @@ RSpec.describe "Logging in", type: :request do
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
   let(:castle_risk_response) { allow_risk_response }
 
+  # @param email [String]
+  # @param password [String]
+  # @param request_token [String]
   def send_sign_in_request(email, password, request_token)
     post "/users/sign_in",
       params: {

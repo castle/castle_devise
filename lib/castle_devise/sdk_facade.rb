@@ -37,13 +37,14 @@ module CastleDevise
 
     # Sends request to the /v1/risk endpoint.
     # @param event [String]
+    # @param status [String]
     # @param context [CastleDevise::Context]
     # @return [Hash] Raw API response
     # @see https://docs.castle.io/v1/reference/api-reference/#v1risk
-    def risk(event:, context:)
+    def risk(event:, context:, status: "$succeeded")
       payload = {
         event: event,
-        status: "$succeeded",
+        status: status,
         user: {
           id: context.castle_id,
           email: context.email,

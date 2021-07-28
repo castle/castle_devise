@@ -8,8 +8,51 @@ module CastleDevise
     module RegistrationsController
       extend ActiveSupport::Concern
 
-      included do
-        before_action :castle_filter, only: :create
+      # @param klass [self]
+      def self.prepended(klass)
+        klass.class_eval do
+          before_action :castle_filter, only: :create
+        end
+      end
+
+      # PUT /resource
+      def update
+        context = CastleDevise::Context.from_rack_env(request.env, scope_name, resource)
+
+        if resource_class.castle_hooks[:profile_update]
+          begin
+            # TODO: Implement a verification mechanism for this action.
+            CastleDevise.sdk_facade.risk(
+              event: "$profile_update",
+              status: "$attempted",
+              context: context
+            )
+          rescue Castle::InvalidParametersError
+            # TODO: We should act differently if the error is about missing/invalid request token
+            #   compared to any other validation errors. However, we can't do this with the
+            #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+            CastleDevise.logger.warn(
+              "[CastleDevise] /v1/risk request contained invalid parameters." \
+              " This might mean that either you didn't configure Castle's Javascript properly," \
+              " or a request has been made without Javascript (eg. cURL/bot)." \
+              " Such a request is treated as if Castle responded with a 'deny' action in" \
+              " non-monitoring mode."
+            )
+          rescue Castle::Error => e
+            # log API errors and allow
+            CastleDevise.logger.error("[CastleDevise] risk($profile_update): #{e}")
+          end
+        end
+
+        super do |resource|
+          next unless resource_class.castle_hooks[:profile_update]
+
+          CastleDevise.sdk_facade.log(
+            event: "$profile_update",
+            status: resource.saved_changes? ? "$succeeded" : "$failed",
+            context: context
+          )
+        end
       end
 
       # Sends a /v1/filter request to Castle

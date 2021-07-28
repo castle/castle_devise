@@ -5,7 +5,8 @@ RSpec.describe Devise::Models::CastleProtectable do
     expect(User.castle_hooks).to eq(
       before_registration: true,
       after_login: true,
-      after_password_reset_request: true
+      after_password_reset_request: true,
+      profile_update: true
     )
   end
 end
