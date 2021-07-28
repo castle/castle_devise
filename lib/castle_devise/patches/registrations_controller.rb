@@ -40,7 +40,8 @@ module CastleDevise
           "[CastleDevise] /v1/filter request contained invalid parameters." \
           " This might mean that either you didn't configure Castle's Javascript properly, or" \
           " a request has been made without Javascript (eg. cURL/bot)." \
-          " Such a request is treated as if Castle responded with a 'deny' action in non-monitoring mode."
+          " Such a request is treated as if Castle responded with a 'deny' action in" \
+          " non-monitoring mode."
         )
 
         unless CastleDevise.monitoring_mode?

@@ -4,7 +4,9 @@
 
 - Run specs in multiple ruby and rails versions.
 
-## [0.1.0] - 2021-06-11
+- Add $password_reset_request event with $succeeded and $failed statuses
+
+## [0.1.0] - 2021-07-08
 
 - Initial release
 

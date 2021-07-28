@@ -68,15 +68,25 @@ module CastleDevise
     # @return [Hash] Raw API response
     # @see https://docs.castle.io/v1/reference/api-reference/#v1log
     def log(event:, status:, context:)
-      payload = {
-        event: event,
-        status: status,
-        user: {
+      return if context.castle_id.blank? && context.email.blank?
+
+      user = if context.castle_id
+        {
           id: context.castle_id,
           email: context.email,
           registered_at: format_time(context.registered_at),
           traits: context.user_traits
-        }.compact,
+        }
+      else
+        {
+          email: context.email
+        }
+      end
+
+      payload = {
+        event: event,
+        status: status,
+        user: user,
         context: payload_context(context.rack_request)
       }
 

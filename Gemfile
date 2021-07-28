@@ -5,7 +5,9 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in castle-devise.gemspec
 gemspec
 
+gem "actionmailer"
 gem "activerecord"
+gem "byebug"
 gem "railties", "~> 6.1"
 gem "rake"
 gem "rspec"
