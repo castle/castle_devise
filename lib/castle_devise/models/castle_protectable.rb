@@ -11,8 +11,11 @@ module Devise
     #     {
     #       after_login: true, # trigger risk($login) and log($login, $failed),
     #       before_registration: true, # trigger filter($registration)
-    #       after_password_reset_request: true, # trigger log($password_reset_requested, $succeeded) and log($password_reset_requested, $failed)
-    #       profile_update: true # trigger risk($profile_update, $attempted), log($profile_update, $succeeded) and log($profile_update, $failed)
+    #       after_password_reset_request: true, # trigger log($password_reset_request, $succeeded)
+    #                                           # and log($password_reset_request, $failed)
+    #       profile_update: true # trigger risk($profile_update, $attempted),
+    #                            # log($profile_update, $succeeded)
+    #                            # and log($profile_update, $failed)
     #     }
     module CastleProtectable
       extend ActiveSupport::Concern

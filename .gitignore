@@ -13,6 +13,12 @@
 # IntelliJ
 .idea/
 
+.bundle
+
+# We do want the CI builds to fail when new dependencies ship breaking changes
+# so don't checkin the lockfiles used for the build.
+gemfiles/*.lock
+
 vendor/
 
 spec/dummy_app/log/
