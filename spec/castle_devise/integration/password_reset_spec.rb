@@ -6,7 +6,7 @@ RSpec.describe "Password reset", type: :request do
     put "/users/password",
       params: {
         user: {
-          reset_password_token: password_reset_token,
+          reset_password_token: reset_password_token,
           password: new_password,
           password_confirmation: new_password_confirmation
         },
@@ -27,7 +27,8 @@ RSpec.describe "Password reset", type: :request do
       password_confirmation: password
     )
   end
-  let(:password_reset_token) { user.send_reset_password_instructions }
+  let(:send_reset_password_instructions) { user.send_reset_password_instructions }
+  let(:reset_password_token) { send_reset_password_instructions }
 
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
@@ -41,7 +42,7 @@ RSpec.describe "Password reset", type: :request do
     end
 
     before do
-      password_reset_token
+      send_reset_password_instructions
 
       send_password_reset
     end
@@ -57,7 +58,7 @@ RSpec.describe "Password reset", type: :request do
 
   context "when profile update hooks are enabled" do
     before do
-      password_reset_token
+      send_reset_password_instructions
 
       send_password_reset
     end
@@ -92,8 +93,20 @@ RSpec.describe "Password reset", type: :request do
       end
     end
 
-    context 'when resource does not exist' do
-      pending
+    context "when invalid reset password token" do
+      let(:reset_password_token) { "fake_reset_password_token" }
+
+      it "does not update the password" do
+        expect(user.reload.valid_password?(password)).to eq(true)
+      end
+
+      it "logs profile_update event with failed status" do
+        expect(facade).to have_received(:log).with(
+          event: "$profile_update",
+          status: "$failed",
+          context: have_attributes(email: "")
+        )
+      end
     end
   end
 
@@ -104,7 +117,7 @@ RSpec.describe "Password reset", type: :request do
 
         allow(CastleDevise.logger).to receive(:error)
 
-        password_reset_token
+        send_reset_password_instructions
 
         send_password_reset
       end
