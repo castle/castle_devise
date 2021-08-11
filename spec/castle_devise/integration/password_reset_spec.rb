@@ -46,14 +46,6 @@ RSpec.describe "Password reset", type: :request do
       send_password_reset
     end
 
-    it "does not use risk action for the profile_update event" do
-      expect(facade).not_to have_received(:risk).with(
-        event: "$profile_update",
-        status: "$attempted",
-        context: have_attributes(email: email, resource: user)
-      )
-    end
-
     it "does not log the profile_update event" do
       expect(facade).not_to have_received(:log)
     end
@@ -75,14 +67,6 @@ RSpec.describe "Password reset", type: :request do
         expect(user.reload.valid_password?(new_password)).to eq(true)
       end
 
-      it "performs risk action with profile_update event" do
-        expect(facade).to have_received(:risk).with(
-          event: "$profile_update",
-          status: "$attempted",
-          context: have_attributes(email: email, resource: user)
-        )
-      end
-
       it "logs profile_update event with succeeded status" do
         expect(facade).to have_received(:log).with(
           event: "$profile_update",
@@ -99,14 +83,6 @@ RSpec.describe "Password reset", type: :request do
         expect(user.reload.valid_password?(password)).to eq(true)
       end
 
-      it "performs risk action with profile_update event" do
-        expect(facade).to have_received(:risk).with(
-          event: "$profile_update",
-          status: "$attempted",
-          context: have_attributes(email: email, resource: user)
-        )
-      end
-
       it "logs profile_update event with failed status" do
         expect(facade).to have_received(:log).with(
           event: "$profile_update",
@@ -115,50 +91,14 @@ RSpec.describe "Password reset", type: :request do
         )
       end
     end
+
+    context 'when resource does not exist' do
+      pending
+    end
   end
 
   context "when profile update hooks are enabled and there are errors" do
-    context "when Castle raises InvalidParametersError for risk endpoint" do
-      before do
-        allow(facade).to receive(:risk).and_raise(Castle::InvalidParametersError)
-
-        allow(CastleDevise.logger).to receive(:warn)
-
-        password_reset_token
-
-        send_password_reset
-      end
-
-      it "logs the warning" do
-        expect(CastleDevise.logger).to have_received(:warn)
-      end
-
-      it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
-      end
-    end
-
-    context "when Castle raises other error for risk endpoint" do
-      before do
-        allow(facade).to receive(:risk).and_raise(Castle::Error)
-
-        allow(CastleDevise.logger).to receive(:error)
-
-        password_reset_token
-
-        send_password_reset
-      end
-
-      it "logs the error" do
-        expect(CastleDevise.logger).to have_received(:error)
-      end
-
-      it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
-      end
-    end
-
-    context "when Castle raises error for log endpoint" do
+    context "when Castle raises error" do
       before do
         allow(facade).to receive(:log).and_raise(Castle::Error)
 
