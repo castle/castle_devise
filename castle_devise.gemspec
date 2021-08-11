@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/castle/castle_devise"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-  spec.authors = ["Kacper Madej", "Johan Brissmyr"]
+  spec.authors = ["Kacper Madej", "Dawid Libiszewski", "Johan Brissmyr"]
   spec.email = ["kacper@castle.io"]
 
   spec.metadata["homepage_uri"] = spec.homepage

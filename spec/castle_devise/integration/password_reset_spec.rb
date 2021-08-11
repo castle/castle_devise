@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-RSpec.describe "Profile update", type: :request do
-  subject(:send_profile_update) do
-    put "/users",
+# Based on the $profile_update event.
+RSpec.describe "Password reset", type: :request do
+  subject(:send_password_reset) do
+    put "/users/password",
       params: {
-        email: email,
         user: {
-          current_password: current_password,
+          reset_password_token: password_reset_token,
           password: new_password,
-          password_confirmation: new_password
+          password_confirmation: new_password_confirmation
         },
         castle_request_token: request_token
       }
@@ -19,7 +19,7 @@ RSpec.describe "Profile update", type: :request do
   let(:email) { "user@example.com" }
   let(:password) { "123456" }
   let(:new_password) { "654321" }
-  let(:current_password) { password }
+  let(:new_password_confirmation) { new_password }
   let!(:user) do
     User.create!(
       email: email,
@@ -27,13 +27,9 @@ RSpec.describe "Profile update", type: :request do
       password_confirmation: password
     )
   end
-  let(:login_castle_risk_response) { allow_risk_response }
-  let(:profile_update_castle_risk_response) { allow_risk_response }
+  let(:password_reset_token) { user.send_reset_password_instructions }
 
   before do
-    # First, we need to sign in so we can update the password in the next step
-    sign_in(user)
-
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
   end
 
@@ -45,9 +41,9 @@ RSpec.describe "Profile update", type: :request do
     end
 
     before do
-      allow(facade).to receive(:risk).and_return(login_castle_risk_response)
+      password_reset_token
 
-      send_profile_update
+      send_password_reset
     end
 
     it "does not use risk action for the profile_update event" do
@@ -69,11 +65,9 @@ RSpec.describe "Profile update", type: :request do
 
   context "when profile update hooks are enabled" do
     before do
-      allow(facade).to receive(:risk).and_return(
-        login_castle_risk_response, profile_update_castle_risk_response
-      )
+      password_reset_token
 
-      send_profile_update
+      send_password_reset
     end
 
     context "when password successfully changed" do
@@ -99,7 +93,7 @@ RSpec.describe "Profile update", type: :request do
     end
 
     context "when password failed to change" do
-      let(:current_password) { "abcdef" }
+      let(:new_password_confirmation) { "abcdef" }
 
       it "does not update the password" do
         expect(user.reload.valid_password?(password)).to eq(true)
@@ -126,15 +120,13 @@ RSpec.describe "Profile update", type: :request do
   context "when profile update hooks are enabled and there are errors" do
     context "when Castle raises InvalidParametersError for risk endpoint" do
       before do
-        call_risk_count = 0
-        allow(facade).to receive(:risk) do
-          call_risk_count += 1
-          call_risk_count >= 2 ? raise(Castle::InvalidParametersError) : login_castle_risk_response
-        end
+        allow(facade).to receive(:risk).and_raise(Castle::InvalidParametersError)
 
         allow(CastleDevise.logger).to receive(:warn)
 
-        send_profile_update
+        password_reset_token
+
+        send_password_reset
       end
 
       it "logs the warning" do
@@ -148,15 +140,13 @@ RSpec.describe "Profile update", type: :request do
 
     context "when Castle raises other error for risk endpoint" do
       before do
-        call_risk_count = 0
-        allow(facade).to receive(:risk) do
-          call_risk_count += 1
-          call_risk_count >= 2 ? raise(Castle::Error) : login_castle_risk_response
-        end
+        allow(facade).to receive(:risk).and_raise(Castle::Error)
 
         allow(CastleDevise.logger).to receive(:error)
 
-        send_profile_update
+        password_reset_token
+
+        send_password_reset
       end
 
       it "logs the error" do
@@ -170,15 +160,13 @@ RSpec.describe "Profile update", type: :request do
 
     context "when Castle raises error for log endpoint" do
       before do
-        allow(facade).to receive(:risk).and_return(
-          login_castle_risk_response, profile_update_castle_risk_response
-        )
-
         allow(facade).to receive(:log).and_raise(Castle::Error)
 
         allow(CastleDevise.logger).to receive(:error)
 
-        send_profile_update
+        password_reset_token
+
+        send_password_reset
       end
 
       it "logs the error" do

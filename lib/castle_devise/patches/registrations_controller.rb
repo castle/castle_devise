@@ -47,11 +47,16 @@ module CastleDevise
         super do |resource|
           next unless resource_class.castle_hooks[:profile_update]
 
-          CastleDevise.sdk_facade.log(
-            event: "$profile_update",
-            status: resource.saved_changes? ? "$succeeded" : "$failed",
-            context: context
-          )
+          begin
+            CastleDevise.sdk_facade.log(
+              event: "$profile_update",
+              status: resource.saved_changes? ? "$succeeded" : "$failed",
+              context: context
+            )
+          rescue Castle::Error => e
+            # log API errors and pass-through it
+            CastleDevise.logger.error("[CastleDevise] log($password_reset_request): #{e}")
+          end
         end
       end
 
