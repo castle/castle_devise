@@ -2,6 +2,7 @@
 
 ## [Unreleased][main]
 
+- Add Log action for $profile_update event with $succeeded and $failed statuses during reset password process
 - Add Risk action for $profile_update event with $attempted status and Log action for $profile_update event with $succeeded and $failed statuses
 - Add Log action for $password_reset_request event with $succeeded and $failed statuses
 - Run specs in multiple ruby and rails versions.

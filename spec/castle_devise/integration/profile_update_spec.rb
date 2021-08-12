@@ -124,7 +124,7 @@ RSpec.describe "Profile update", type: :request do
   end
 
   context "when profile update hooks are enabled and there are errors" do
-    context "when Castle raises InvalidParametersError" do
+    context "when Castle raises InvalidParametersError for risk endpoint" do
       before do
         call_risk_count = 0
         allow(facade).to receive(:risk) do
@@ -132,7 +132,13 @@ RSpec.describe "Profile update", type: :request do
           call_risk_count >= 2 ? raise(Castle::InvalidParametersError) : login_castle_risk_response
         end
 
+        allow(CastleDevise.logger).to receive(:warn)
+
         send_profile_update
+      end
+
+      it "logs the warning" do
+        expect(CastleDevise.logger).to have_received(:warn)
       end
 
       it "updates the password" do
@@ -140,13 +146,35 @@ RSpec.describe "Profile update", type: :request do
       end
     end
 
-    context "when Castle raises other error" do
+    context "when Castle raises other error for risk endpoint" do
       before do
         call_risk_count = 0
         allow(facade).to receive(:risk) do
           call_risk_count += 1
           call_risk_count >= 2 ? raise(Castle::Error) : login_castle_risk_response
         end
+
+        allow(CastleDevise.logger).to receive(:error)
+
+        send_profile_update
+      end
+
+      it "logs the error" do
+        expect(CastleDevise.logger).to have_received(:error)
+      end
+
+      it "updates the password" do
+        expect(user.reload.valid_password?(new_password)).to eq(true)
+      end
+    end
+
+    context "when Castle raises error for log endpoint" do
+      before do
+        allow(facade).to receive(:risk).and_return(
+          login_castle_risk_response, profile_update_castle_risk_response
+        )
+
+        allow(facade).to receive(:log).and_raise(Castle::Error)
 
         allow(CastleDevise.logger).to receive(:error)
 

@@ -11,6 +11,8 @@ CastleDevise is a [Devise](https://github.com/heartcombo/devise) plugin that int
 It currently provides the following features:
 - preventing bots from registration attacks using Castle's [Filter API](https://docs.castle.io/v1/reference/api-reference/#filter)
 - preventing ATO attacks using Castle's [Risk API](https://docs.castle.io/v1/reference/api-reference/#risk)
+- blocks attempts to update passwords for high-risk logged-in users
+- logs attempts of password reset flows so that you can see them on the Castle dashboard
 
 If you want to learn about all capabilities of Castle, please take a look at [our documentation](https://docs.castle.io/).
 
