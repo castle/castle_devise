@@ -75,9 +75,7 @@ Include Castle's c.js script in the head section of your layout:
 Add the following tag to the the `<form>` tag in both `devise/registrations/new.html.erb` and `devise/sessions/new.html.erb` (if you haven't generated them yet, run `rails generate devise:views`):
 
 ```ruby
-<%= form_for @user do |f| %>
-  …
-  <%= castle_request_token %>
+<%= form_for @user,  html: { onsubmit: castle_on_form_submit } do |f| %>
   …
 <% end %>
 ```
@@ -87,20 +85,21 @@ You're set! Now verify that everything works by logging in to your application a
 
 #### Further steps if you're using Webpacker
 
-Add `castle.js` to your package.json file:
+Add `@castleio/castle-js` to your package.json file:
 
 ```
-yarn add castle.js
+yarn add @castleio/castle-js
 ```
 
-Require castle.js in your application pack:
+configure castle in your application pack:
 
 ```javascript
-require("castle.js");
+import * as Castle from '@castleio/castle-js'
 
-_castle("setAppId", YOUR_APPLICATION_ID);
+Castle.configure(YOUR_APPLICATION_ID);
 ```
 
+for advanced configuration follow [the readme](https://www.npmjs.com/package/@castleio/castle-js#configuration)
 
 ## How-Tos
 
