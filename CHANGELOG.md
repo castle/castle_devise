@@ -2,6 +2,8 @@
 
 ## [Unreleased][main]
 
+- Switch c.js to 2.0 version, Update c.js related helpers
+
 ## [0.2.0] - 2021-08-12
 
 - Add Log action for $profile_update event with $succeeded and $failed statuses during reset password process
