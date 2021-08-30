@@ -38,7 +38,7 @@ module CastleDevise
       #
       # @return [String]
       def castle_on_form_submit
-        "_castle('onFormSubmit', event)"
+        "typeof(_castle)=='undefined'?event.preventDefault():_castle('onFormSubmit', event)"
       end
     end
   end
