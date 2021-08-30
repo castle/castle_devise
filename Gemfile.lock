@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    castle_devise (0.2.0)
+    castle_devise (0.3.0)
       activesupport (>= 5.0)
       castle-rb (>= 7.0, < 8.0)
       devise (>= 4.3.0, < 5.0)
