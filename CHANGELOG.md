@@ -2,6 +2,8 @@
 
 ## [Unreleased][main]
 
+## [0.3.0] - 2021-08-30
+
 - Switch c.js to 2.0 version, Update c.js related helpers
 
 ## [0.2.0] - 2021-08-12
@@ -15,6 +17,7 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.2.0...HEAD
+[main]: https://github.com/castle/castle_devise/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/castle/castle_devise/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/castle/castle_devise/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/castle/castle_devise/releases/tag/v0.1.0
