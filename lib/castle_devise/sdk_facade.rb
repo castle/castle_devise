@@ -20,7 +20,7 @@ module CastleDevise
     # @param context [CastleDevise::Context]
     # @return [Hash] Raw API response
     # @see https://docs.castle.io/v1/reference/api-reference/#v1filter
-    def filter(event:, context:, status: '$attempted')
+    def filter(event:, context:, status: "$attempted")
       payload = {
         event: event,
         status: status,

@@ -53,8 +53,8 @@ Warden::Manager.before_failure do |env, opts|
 
   begin
     CastleDevise.sdk_facade.filter(
-      event: '$login',
-      status: '$failed',
+      event: "$login",
+      status: "$failed",
       context: context
     )
   rescue Castle::Error => e
