@@ -37,13 +37,13 @@ RSpec.describe "Logging in", type: :request do
 
     context "with non-existing user" do
       before do
-        allow(facade).to receive(:log)
+        allow(facade).to receive(:filter)
 
         send_sign_in_request("non-existing@example.com", "123456", "token123")
       end
 
-      it "does not log the event" do
-        expect(facade).not_to have_received(:log)
+      it "does not filter the event" do
+        expect(facade).not_to have_received(:filter)
       end
 
       it "is successful" do
@@ -74,13 +74,13 @@ RSpec.describe "Logging in", type: :request do
 
   context "with non-existing user" do
     before do
-      allow(facade).to receive(:log)
+      allow(facade).to receive(:filter)
 
       send_sign_in_request("non-existing@example.com", "123456", "token123")
     end
 
     it "logs the event" do
-      expect(facade).to have_received(:log) do |event:, status:, context:|
+      expect(facade).to have_received(:filter) do |event:, status:, context:|
         expect(event).to eq("$login")
         expect(status).to eq("$failed")
         expect(context.email).to eq("non-existing@example.com")
@@ -98,13 +98,13 @@ RSpec.describe "Logging in", type: :request do
 
   context "with incorrect password" do
     before do
-      allow(facade).to receive(:log)
+      allow(facade).to receive(:filter)
 
       send_sign_in_request(user.email, "333", "token123")
     end
 
     it "logs the event" do
-      expect(facade).to have_received(:log) do |event:, status:, context:|
+      expect(facade).to have_received(:filter) do |event:, status:, context:|
         expect(event).to eq("$login")
         expect(status).to eq("$failed")
         expect(context.email).to eq(user.email)
@@ -122,7 +122,7 @@ RSpec.describe "Logging in", type: :request do
 
   context "with invalid request token" do
     before do
-      allow(facade).to receive(:log).and_raise(Castle::InvalidParametersError)
+      allow(facade).to receive(:filter).and_raise(Castle::InvalidParametersError)
       allow(CastleDevise.logger).to receive(:error)
 
       send_sign_in_request(user.email, "333", "token123")

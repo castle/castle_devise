@@ -52,12 +52,12 @@ Warden::Manager.before_failure do |env, opts|
   context = CastleDevise::Context.from_rack_env(env, opts[:scope])
 
   begin
-    CastleDevise.sdk_facade.log(
-      event: "$login",
-      status: "$failed",
+    CastleDevise.sdk_facade.filter(
+      event: '$login',
+      status: '$failed',
       context: context
     )
   rescue Castle::Error => e
-    CastleDevise.logger.error("[CastleDevise] log($login, $failed): #{e}")
+    CastleDevise.logger.error("[CastleDevise] filter($login, $failed): #{e}")
   end
 end
