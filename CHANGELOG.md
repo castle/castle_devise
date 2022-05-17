@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased][main]
+-  Send $login $failed events to /v1/filter
 
 ## [0.3.0] - 2021-08-30
 

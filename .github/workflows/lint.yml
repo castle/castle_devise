@@ -9,10 +9,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v1
+      - name: Give permissions
+        run: |
+          sudo chown -R root:root $GITHUB_WORKSPACE
       - name: standardrb
         uses: SennaLabs/action-standardrb@v0.0.3
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review # Default is github-pr-check
-          rubocop_version: 1.1.1 # note: this actually refers to standardb version, not Rubocop
+          rubocop_version: 1.1.6 # note: this actually refers to standardb version, not Rubocop
           rubocop_flags: --format progress
