@@ -25,6 +25,8 @@ module CastleDevise
 
     # @yieldparam [CastleDevise::Configuration] configuration object
     def configure
+      @sdk_facade = @castle = nil
+
       yield configuration
 
       Castle.api_secret = configuration.api_secret
@@ -38,7 +40,7 @@ module CastleDevise
 
     # @return [CastleDevise::SdkFacade]
     def sdk_facade
-      @sdk_facade ||= CastleDevise::SdkFacade.new(
+      @sdk_facade ||= configuration.castle_sdk_facade.new(
         castle,
         configuration.before_request_hooks,
         configuration.after_request_hooks
@@ -47,15 +49,15 @@ module CastleDevise
 
     # @return [Castle::Client]
     def castle
-      @castle ||= Castle::Client.new
+      @castle ||= configuration.castle_client
     end
   end
 end
 
+require_relative "castle_devise/sdk_facade"
 require_relative "castle_devise/configuration"
 require_relative "castle_devise/context"
 require_relative "castle_devise/patches"
-require_relative "castle_devise/sdk_facade"
 require_relative "castle_devise/controllers/helpers"
 require_relative "castle_devise/helpers/castle_helper"
 require_relative "castle_devise/hooks/castle_protectable"
