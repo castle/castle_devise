@@ -14,7 +14,7 @@ RSpec.describe CastleDevise do
     let(:facade) { class_double(::CastleDevise::SdkFacade, new: facade_instance) }
 
     before do
-      described_class.configure { |config| config.castle_sdk_facade = facade }
+      described_class.configure { |config| config.castle_sdk_facade_class = facade }
     end
 
     it "uses the override facade" do

@@ -40,7 +40,7 @@ module CastleDevise
 
     # @return [CastleDevise::SdkFacade]
     def sdk_facade
-      @sdk_facade ||= configuration.castle_sdk_facade.new(
+      @sdk_facade ||= configuration.castle_sdk_facade_class.new(
         castle,
         configuration.before_request_hooks,
         configuration.after_request_hooks

@@ -39,9 +39,9 @@ module CastleDevise
     #   @return [Array<Proc>] Array of procs that will get called after a request to the Castle API
     config_accessor(:after_request_hooks) { [] }
 
-    # @!attribute castle_sdk_facade
+    # @!attribute castle_sdk_facade_class
     #   @return [Class] Castle API implementation
-    config_accessor(:castle_sdk_facade) { ::CastleDevise::SdkFacade }
+    config_accessor(:castle_sdk_facade_class) { ::CastleDevise::SdkFacade }
 
     # @!attribute castle_client
     #   @return [Class] Castle SDK client
