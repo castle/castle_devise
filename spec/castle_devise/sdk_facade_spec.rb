@@ -187,7 +187,8 @@ RSpec.describe CastleDevise::SdkFacade do
                   name: String
                 },
                 device: {
-                  token: String
+                  token: String,
+                  fingerprint: String
                 }
               )
             )
