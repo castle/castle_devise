@@ -2,6 +2,9 @@
 
 ## [Unreleased][main]
 
+## [0.4.1] - 2022-12-13
+- Introduced new configuration options for `castle_sdk_facade_class` and `castle_client`
+
 ## [0.4.0] - 2022-05-17
 -  Send $login $failed events to /v1/filter
 
