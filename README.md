@@ -2,11 +2,11 @@
 
 **Disclaimer:** CastleDevise is currently in beta. There might be some upcoming breaking changes to the gem before we stabilize the API.
 
---- 
+---
 
-# CastleDevice
+# CastleDevise
 
-CastleDevise is a [Devise](https://github.com/heartcombo/devise) plugin that integrates [Castle](https://castle.io). 
+CastleDevise is a [Devise](https://github.com/heartcombo/devise) plugin that integrates [Castle](https://castle.io).
 
 It currently provides the following features:
 - preventing bots from registration attacks using Castle's [Filter API](https://docs.castle.io/v1/reference/api-reference/#filter)
@@ -26,11 +26,11 @@ gem 'castle_devise'
 
 Create `config/initializers/castle_devise.rb` and fill in your API secret and APP_ID from the [Castle Dashboard](https://dashboard.castle.io/settings/general)
 
-```ruby 
+```ruby
 CastleDevise.configure do |config|
   config.api_secret = ENV.fetch('CASTLE_API_SECRET')
   config.app_id = ENV.fetch('CASTLE_APP_ID')
-  
+
   # When monitoring mode is enabled, CastleDevise sends
   # requests to Castle but it doesn't act on the "deny" verdicts.
   #
@@ -45,10 +45,10 @@ end
 
 Add `:castle_protectable` Devise module to your User model:
 
-```ruby 
+```ruby
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, 
+         :recoverable, :rememberable, :validatable,
          :castle_protectable # <--- add this
 end
 ```
