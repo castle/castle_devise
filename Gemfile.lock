@@ -82,13 +82,15 @@ GEM
     minitest (5.14.4)
     nokogiri (1.11.7-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.11.7-x86_64-linux)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     public_suffix (4.0.6)
     racc (1.5.2)
-    rack (2.2.3)
+    rack (2.2.6.4)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails-dom-testing (2.0.3)
@@ -172,6 +174,7 @@ PLATFORMS
   x86_64-darwin-18
   x86_64-darwin-19
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   actionmailer
