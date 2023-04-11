@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "actionmailer"
 gem "activerecord"
-gem "railties", "~> 5.2.6"
+gem "railties", "~> 7.0"
 gem "rake"
 gem "rspec"
 gem "rspec-rails"
