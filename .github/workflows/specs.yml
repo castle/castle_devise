@@ -19,7 +19,7 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - name: Install depenencies
+    - name: Install dependencies
       env:
         BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
       run: |
