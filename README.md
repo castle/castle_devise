@@ -211,3 +211,26 @@ CastleDevise.configure do |config|
   end
 end
 ```
+
+## Development
+
+### Setup
+
+```bash
+bundle install
+```
+
+### Running tests
+
+Most of the specs should pass just by running the following command:
+
+```bash
+bundle exec rake
+```
+
+We also have a few VCR tests that will periodically rebuild the cassettes just to make sure that the integration with Castle API is working.
+For those, you need to run your specs with a proper Castle API Secret:
+
+```bash
+CASTLE_API_SECRET=your_api_secret bundle exec rake
+```
