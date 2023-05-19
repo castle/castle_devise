@@ -28,16 +28,19 @@ module CastleDevise
               context: context
             )
           rescue Castle::InvalidParametersError
-            # TODO: We should act differently if the error is about missing/invalid request token
-            #   compared to any other validation errors. However, we can't do this with the
-            #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+            # log API error and allow
             CastleDevise.logger.warn(
-              "[CastleDevise] /v1/risk request contained invalid parameters." \
-              " This might mean that either you didn't configure Castle's Javascript properly," \
+              "[CastleDevise] /v1/risk request contained invalid parameters."
+            )
+          rescue Castle::InvalidRequestTokenError
+            CastleDevise.logger.warn(
+              "[CastleDevise] /v1/risk request contained invalid token." \
+              " This means that either you didn't configure Castle's Javascript properly," \
               " or a request has been made without Javascript (eg. cURL/bot)." \
               " Such a request is treated as if Castle responded with a 'deny' action in" \
               " non-monitoring mode."
             )
+            # TODO: Implement a deny mechanism for this action.
           rescue Castle::Error => e
             # log API errors and allow
             CastleDevise.logger.error("[CastleDevise] risk($profile_update): #{e}")
@@ -81,12 +84,14 @@ module CastleDevise
           # everything fine, continue
         end
       rescue Castle::InvalidParametersError
-        # TODO: We should act differently if the error is about missing/invalid request token
-        #   compared to any other validation errors. However, we can't do this with the
-        #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+        # log error and allow
         CastleDevise.logger.warn(
-          "[CastleDevise] /v1/filter request contained invalid parameters." \
-          " This might mean that either you didn't configure Castle's Javascript properly, or" \
+          "[CastleDevise] /v1/filter request contained invalid parameters."
+        )
+      rescue Castle::InvalidRequestTokenError
+        CastleDevise.logger.warn(
+          "[CastleDevise] /v1/filter request contained invalid request token." \
+          " This means that either you didn't configure Castle's Javascript properly, or" \
           " a request has been made without Javascript (eg. cURL/bot)." \
           " Such a request is treated as if Castle responded with a 'deny' action in" \
           " non-monitoring mode."

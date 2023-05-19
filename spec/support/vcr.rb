@@ -2,7 +2,7 @@
 
 VCR.configure do |config|
   config.default_cassette_options = {
-    re_record_interval: 1.month
+    re_record_interval: 10.years
   }
 
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"

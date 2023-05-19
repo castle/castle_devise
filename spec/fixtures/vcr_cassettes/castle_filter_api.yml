@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.castle.io/v1/filter
     body:
       encoding: UTF-8
-      string: '{"event":"$registration","user":{"email":"user@example.com"},"request_token":"3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg","context":{"headers":{"Content-Length":"0","Remote-Addr":"1.2.3.4"},"ip":"1.2.3.4","library":{"name":"castle-rb","version":"7.1.1"}},"timestamp":"2021-07-05T10:55:01.806Z","sent_at":"2021-07-05T10:55:01.807Z"}'
+      string: '{"event":"$registration","user":{"email":"user@example.com"},"request_token":"3NzgMvRonsQ1mlt9SkqSBChy4807pQTeC5dpzRySB6Ml0CDTWLDozQ03Z0olj1fFNoMlNQzYZj7HBg2aC4-fMbjIarJs7i-icv4OoWm4V-M4t0qAafQLo3z4EaUztyujfPIO7UX2Ae1HxEKVKKZSkjmiPfohtyO9ePsHmm31KaR8uFf-P7lR-yi_KYVc2i7hKPsLpm23Jahr_A3kKNQKv2f6B-Ixpkz9JqNW-jq5U_w8tzGsbvYQpCeiUfompFShAPFX9Gv2V_Q54GHOg5f2xTDzBvhtr1b7lLQro3zyDuVavkKEev4R5VzaS-1Y-xe-KNAQrHj_C657t1T4PTN2_Tm4Uvwnplv6OLtC_TmtUv0yp1ItCP9iYrqXYs0Il2LNCCXEZpQw82edLSJ3SNdijUiXYs0IORpjcDMavwjlYrlZP8qxdNNiUaDnZsIIl23NCJZiMg","context":{"headers":{"Content-Length":"0","Remote-Addr":"1.2.3.4"},"ip":"1.2.3.4","library":{"name":"castle-rb","version":"7.2.0"}},"timestamp":"2021-07-05T10:55:01.806Z","sent_at":"2021-07-05T10:55:01.807Z"}'
     headers:
       Content-Type:
       - application/json

@@ -23,9 +23,11 @@ Warden::Manager.after_authentication do |resource, warden, opts|
       context.logout!
     end
   rescue Castle::InvalidParametersError
-    # TODO: We should act differently if the error is about missing/invalid request token
-    #   compared to any other validation errors. However, we can't do this with the
-    #   current Castle SDK as it doesn't give us any way to differentiate these two cases.
+    # log API error and allow
+    CastleDevise.logger.warn(
+      "[CastleDevise] /v1/risk request contained invalid parameters."
+    )
+  rescue Castle::InvalidRequestTokenError
     CastleDevise.logger.warn(
       "[CastleDevise] /v1/risk request contained invalid parameters." \
       " This might mean that either you didn't configure Castle's Javascript properly, or" \
