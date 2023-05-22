@@ -113,9 +113,9 @@ RSpec.describe "Registration attempt", type: :request do
     end
   end
 
-  context "when Castle raises InvalidParametersError" do
+  context "when Castle raises InvalidRequestTokenError" do
     before do
-      allow(facade).to receive(:filter).and_raise(Castle::InvalidParametersError)
+      allow(facade).to receive(:filter).and_raise(Castle::InvalidRequestTokenError)
       send_registration_request
     end
 
