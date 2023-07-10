@@ -2,6 +2,8 @@
 
 ## [Unreleased][main]
 
+- Change `params` to contain the email address sent by the user for the `/v1/filter` endpoint
+
 ## [0.4.1] - 2022-12-13
 - Introduced new configuration options for `castle_sdk_facade_class` and `castle_client`
 

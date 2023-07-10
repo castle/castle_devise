@@ -24,9 +24,9 @@ module CastleDevise
       payload = {
         event: event,
         status: status,
-        user: {
+        params: {
           email: context.email
-        },
+        }.compact,
         request_token: context.request_token,
         context: payload_context(context.rack_request)
       }
