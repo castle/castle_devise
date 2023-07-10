@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    castle_devise (0.4.2)
+    castle_devise (0.4.1)
       activesupport (>= 5.0)
       castle-rb (>= 7.2, < 8.0)
       devise (>= 4.3.0, < 5.0)
@@ -52,7 +52,7 @@ GEM
       rake
       thor (>= 0.14.0)
     ast (2.4.2)
-    bcrypt (3.1.19)
+    bcrypt (3.1.18)
     builder (3.2.4)
     byebug (11.1.3)
     castle-rb (7.2.0)
@@ -88,7 +88,6 @@ GEM
       net-smtp
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
     minitest (5.18.0)
     net-imap (0.3.4)
       date
@@ -99,9 +98,6 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nokogiri (1.15.1)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.15.1-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.15.1-arm64-darwin)
@@ -179,8 +175,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    sqlite3 (1.6.3)
-      mini_portile2 (~> 2.8.0)
     sqlite3 (1.6.3-aarch64-linux)
     sqlite3 (1.6.3-arm64-darwin)
     sqlite3 (1.6.3-x86_64-darwin)
@@ -212,7 +206,6 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin-21
-  ruby
   x86_64-darwin-18
   x86_64-darwin-19
   x86_64-darwin-20

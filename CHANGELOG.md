@@ -2,7 +2,6 @@
 
 ## [Unreleased][main]
 
-## [0.4.2] - 2023-07-10
 - Change `params` to contain the email address sent by the user for the `/v1/filter` endpoint
 
 ## [0.4.1] - 2022-12-13
