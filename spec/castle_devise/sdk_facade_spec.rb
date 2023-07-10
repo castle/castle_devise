@@ -59,6 +59,33 @@ RSpec.describe CastleDevise::SdkFacade do
         facade.filter(event: event, context: context)
       end
     end
+
+    describe "user's params" do
+      context "when user given as rack request params and email is present" do
+        let(:expected_user_params) do
+          {
+            email: user_email
+          }
+        end
+
+        it "performs the request to filter with user's email only" do
+          expect(castle).to have_received(:filter).with(
+            hash_including(params: expected_user_params)
+          )
+        end
+      end
+
+      context "when user given as rack request params and email is not present" do
+        let(:user_email) { nil }
+        let(:expected_user_params) { {} }
+
+        it "does not perform the request to filter" do
+          expect(castle).to have_received(:filter).with(
+            hash_including(params: expected_user_params)
+          )
+        end
+      end
+    end
   end
 
   describe "#risk" do
