@@ -2,6 +2,8 @@
 
 ## [Unreleased][main]
 
+- Fix an issue where we would send a `login.failed` event on any attempt of accessing a protected resource, not only when the user failed to log in specifically
+
 ## [0.4.2] - 2023-07-10
 - Change `params` to contain the email address sent by the user for the `/v1/filter` endpoint
 

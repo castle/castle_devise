@@ -23,6 +23,10 @@ RSpec.describe "Logging in", type: :request do
       }
   end
 
+  def send_authenticated_request
+    get "/authenticated"
+  end
+
   before do
     allow(CastleDevise).to receive(:sdk_facade).and_return(facade)
     allow(facade).to receive(:risk).and_return(castle_risk_response)
@@ -281,6 +285,13 @@ RSpec.describe "Logging in", type: :request do
       it "authenticates the user" do
         expect(request.env["warden"].user(:user)).to eq(user)
       end
+    end
+  end
+
+  context "when sending an event to an authenticated endpoint" do
+    it "does not send an event to Castle" do
+      send_authenticated_request
+      # expect no RSpec errors on the facade instance_double
     end
   end
 end
