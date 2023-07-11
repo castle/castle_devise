@@ -44,6 +44,9 @@ end
 
 Warden::Manager.before_failure do |env, opts|
   next if opts[:castle_devise] == :skip
+  # recall is set by Devise on a failed login attempt. If it's not set, this hook might fire on any
+  # authentication failure attempt (eg. trying to access a resource while unauthenticated), not just login specifically
+  next unless opts.key?(:recall)
 
   resource_class = Devise.mappings[opts[:scope]].to
 
