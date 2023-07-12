@@ -127,13 +127,13 @@ RSpec.describe "Logging in", type: :request do
   context "with invalid request token" do
     before do
       allow(facade).to receive(:filter).and_raise(::Castle::InvalidRequestTokenError)
-      allow(CastleDevise.logger).to receive(:error)
+      allow(CastleDevise.logger).to receive(:warn)
 
       send_sign_in_request(user.email, "333", "token123")
     end
 
     it "logs the error" do
-      expect(CastleDevise.logger).to have_received(:error)
+      expect(CastleDevise.logger).to have_received(:warn)
     end
 
     it "is successful" do
