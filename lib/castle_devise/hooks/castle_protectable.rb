@@ -63,6 +63,6 @@ Warden::Manager.before_failure do |env, opts|
       context: context
     )
   rescue Castle::Error => e
-    CastleDevise.logger.error("[CastleDevise] filter($login, $failed): #{e}")
+    CastleDevise.logger.warn("[CastleDevise] filter($login, $failed): #{e}")
   end
 end
