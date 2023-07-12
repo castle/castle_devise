@@ -2,6 +2,8 @@
 
 ## [Unreleased][main]
 
+- Throw a warning instead of an error for the `$login.failed` event when an exception is raised
+
 ## [0.4.3] - 2023-07-11
 - Fix an issue where we would send a `login.failed` event on any attempt of accessing a protected resource, not only when the user failed to log in specifically
 
