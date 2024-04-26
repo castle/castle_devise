@@ -10,31 +10,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.7", "3.0", "3.1", "3.2"]
+        ruby: ["3.0", "3.1", "3.2", "3.3"]
         rails: ["6.0", "6.1", "7.0", "7.1"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby ${{ matrix.ruby }}
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-    - name: Install dependencies
-      env:
-        BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
-      run: |
-        gem update --system
-        bundle config path vendor/bundle
-        bundle install
-    - name: Run specs
-      env:
-        BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
-        CASTLE_API_SECRET: ${{ secrets.CASTLE_API_SECRET }}
-      run: |
-        bundle exec rake
-    - name: Simplecov Report
-      if:
-        ${{ matrix.rails == '6.1' && matrix.ruby >= '3.0' }}
-      uses: aki77/simplecov-report-action@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install dependencies
+        env:
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
+        run: |
+          gem update --system
+          bundle config path vendor/bundle
+          bundle install
+      - name: Run specs
+        env:
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
+          CASTLE_API_SECRET: ${{ secrets.CASTLE_API_SECRET }}
+        run: |
+          bundle exec rake
+      - name: Simplecov Report
+        if: ${{ matrix.rails == '6.1' && matrix.ruby >= '3.0' }}
+        uses: aki77/simplecov-report-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
