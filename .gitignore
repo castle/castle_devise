@@ -22,3 +22,4 @@ gemfiles/*.lock
 vendor/
 
 spec/dummy_app/log/
+spec/dummy_app/tmp/
