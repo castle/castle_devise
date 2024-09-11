@@ -15,7 +15,7 @@ Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f 
 
 Rails.backtrace_cleaner.remove_silencers!
 
-if Rails.gem_version >= Gem::Version.new("6.0.0")
+if Rails.gem_version < Gem::Version.new("7.0.0")
   ActiveRecord::MigrationContext.new(
     File.expand_path("../dummy_app/db/migrate", __FILE__),
     ActiveRecord::SchemaMigration
