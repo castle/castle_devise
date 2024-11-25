@@ -11,7 +11,7 @@ gem "rspec"
 gem "rspec-rails"
 gem "simplecov"
 gem "standard"
-gem "sqlite3", "~> 1.7"
+gem "sqlite3"
 gem "vcr"
 gem "webmock"
 
