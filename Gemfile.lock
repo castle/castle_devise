@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    castle_devise (0.4.3)
+    castle_devise (0.4.4)
       activesupport (>= 5.0)
       castle-rb (>= 7.2, < 8.0)
       devise (>= 4.3.0, < 5.0)
@@ -171,7 +171,7 @@ GEM
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.3.7)
+    rexml (3.3.9)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
