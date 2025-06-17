@@ -63,5 +63,6 @@ jobs:
           bundle exec rake
       - name: Simplecov Report
         uses: k1LoW/octocov-action@v1
+        if: matrix.ruby == '3.4' && matrix.rails == '8.0'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
