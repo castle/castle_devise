@@ -14,5 +14,7 @@ gem "standard"
 gem "sqlite3"
 gem "vcr"
 gem "webmock"
+gem "mutex_m"
+gem "logger"
 
 gemspec path: "../"
