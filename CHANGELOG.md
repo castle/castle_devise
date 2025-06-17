@@ -2,7 +2,9 @@
 
 ## [Unreleased][main]
 
+## [0.5.0] - 2025-06-17
 - Throw a warning instead of an error for the `$login.failed` event when an exception is raised
+- Security fixes and dependency updates
 
 ## [0.4.3] - 2023-07-11
 - Fix an issue where we would send a `login.failed` event on any attempt of accessing a protected resource, not only when the user failed to log in specifically
@@ -31,7 +33,8 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.4.3...HEAD
+[main]: https://github.com/castle/castle_devise/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/castle/castle_devise/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/castle/castle_devise/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/castle/castle_devise/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/castle/castle_devise/compare/v0.4.0...v0.4.1
