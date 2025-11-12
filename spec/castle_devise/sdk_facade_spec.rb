@@ -27,7 +27,7 @@ RSpec.describe CastleDevise::SdkFacade do
   shared_examples "calls before- and after- hooks" do |method|
     let(:castle) { instance_double(Castle::Client, method => castle_response) }
     let(:before_hook) do
-      ->(action, context, payload) do
+      ->(_action, _context, payload) do
         payload[:test] = 1
       end
     end

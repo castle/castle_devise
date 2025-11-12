@@ -2,7 +2,7 @@
 
 RSpec.describe CastleDevise do
   it "has a version number" do
-    expect(described_class::VERSION).not_to be nil
+    expect(described_class::VERSION).not_to be_nil
   end
 
   it "properly initializes the facade" do

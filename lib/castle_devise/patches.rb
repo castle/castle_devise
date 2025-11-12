@@ -6,8 +6,8 @@ module CastleDevise
       # Applies monkey-patches to Devise controllers
       # @api private
       def apply
-        Devise::RegistrationsController.send(:prepend, Patches::RegistrationsController)
-        Devise::PasswordsController.send(:prepend, Patches::PasswordsController)
+        Devise::RegistrationsController.prepend Patches::RegistrationsController
+        Devise::PasswordsController.prepend Patches::PasswordsController
       end
     end
   end

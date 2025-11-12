@@ -5,24 +5,24 @@ SimpleCov.start
 
 ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path("../dummy_app/config/environment.rb", __FILE__)
+require File.expand_path("dummy_app/config/environment.rb", __dir__)
 require "rspec/rails"
 require "castle_devise"
 
 require "webmock/rspec"
 
-Dir[File.expand_path("../support/**/*.rb", __FILE__)].sort.each { |f| require f }
+Dir[File.expand_path("support/**/*.rb", __dir__)].sort.each { |f| require f }
 
 Rails.backtrace_cleaner.remove_silencers!
 
 if Rails.gem_version < Gem::Version.new("7.0.0")
   ActiveRecord::MigrationContext.new(
-    File.expand_path("../dummy_app/db/migrate", __FILE__),
+    File.expand_path("dummy_app/db/migrate", __dir__),
     ActiveRecord::SchemaMigration
   ).migrate
 else
   ActiveRecord::MigrationContext.new(
-    File.expand_path("../dummy_app/db/migrate", __FILE__)
+    File.expand_path("dummy_app/db/migrate", __dir__)
   ).migrate
 end
 
