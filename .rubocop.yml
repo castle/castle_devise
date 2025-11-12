@@ -1,6 +1,7 @@
 plugins:
   - rubocop-rspec
   - rubocop-performance
+  - rubocop-rspec_rails
 
 AllCops:
   NewCops: enable

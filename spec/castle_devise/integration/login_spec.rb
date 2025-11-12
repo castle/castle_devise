@@ -71,7 +71,7 @@ RSpec.describe "Logging in", type: :request do
       end
 
       it "redirects" do
-        expect(response.status).to eq(302)
+        expect(response).to have_http_status(:found)
       end
     end
   end
