@@ -19,3 +19,21 @@ jobs:
           reporter: github-pr-review # Default is github-pr-check
           rubocop_version: 1.1.6 # note: this actually refers to standardb version, not Rubocop
           rubocop_flags: --format progress
+
+  rubocop:
+    name: runner / rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+      - name: Install dependencies
+        run: |
+          bundle config path vendor/bundle
+          bundle install
+      - name: Run RuboCop
+        run: |
+          bundle exec rubocop

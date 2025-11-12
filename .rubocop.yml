@@ -1,0 +1,158 @@
+plugins:
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.1
+  SuggestExtensions: false
+  Exclude:
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'spec/dummy_app/**/*'
+    - 'coverage/**/*'
+    - 'gemfiles/**/*'
+    - '.bundle/**/*'
+    - 'Gemfile.lock'
+    - '*.gemspec'
+    - 'Appraisals'
+
+# Style preferences
+Style/Documentation:
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/ClassAndModuleChildren:
+  Enabled: true
+  EnforcedStyle: nested
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/RedundantConstantBase:
+  Enabled: false
+
+# Layout preferences
+Layout/LineLength:
+  Max: 120
+  AllowedPatterns: ['^(\s*#)']
+  Exclude:
+    - 'spec/**/*'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/CaseIndentation:
+  EnforcedStyle: case
+
+Layout/LineContinuationLeadingSpace:
+  EnforcedStyle: leading
+
+# Metrics preferences
+Metrics/BlockLength:
+  Max: 35
+  Exclude:
+    - 'spec/**/*'
+    - 'Rakefile'
+    - '*.gemspec'
+    - 'Gemfile'
+
+Metrics/ModuleLength:
+  Max: 300
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/MethodLength:
+  Max: 40
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/PerceivedComplexity:
+  Max: 10
+  Exclude:
+    - 'spec/**/*'
+
+# RSpec preferences
+RSpec/ExampleLength:
+  Max: 30
+
+RSpec/MultipleExpectations:
+  Max: 8
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/DescribeClass:
+  Enabled: true
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+
+# Performance preferences
+Performance/CollectionLiteralInLoop:
+  Enabled: true
+
+# Naming preferences
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
+Naming/MethodParameterName:
+  MinNameLength: 2
+
+# Lint preferences
+Lint/MissingSuper:
+  Enabled: true
+
+Lint/UnusedBlockArgument:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+
+Lint/AmbiguousBlockAssociation:
+  AllowedMethods: ['change']
+
+# Security preferences
+Security/YAMLLoad:
+  Enabled: true
+
+# Bundler preferences
+Bundler/OrderedGems:
+  Enabled: true
+
