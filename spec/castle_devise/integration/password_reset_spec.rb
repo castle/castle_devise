@@ -4,14 +4,14 @@
 RSpec.describe "Password reset", type: :request do
   subject(:send_password_reset) do
     put "/users/password",
-      params: {
-        user: {
-          reset_password_token: reset_password_token,
-          password: new_password,
-          password_confirmation: new_password_confirmation
-        },
-        castle_request_token: request_token
-      }
+        params: {
+          user: {
+            reset_password_token: reset_password_token,
+            password: new_password,
+            password_confirmation: new_password_confirmation
+          },
+          castle_request_token: request_token
+        }
   end
 
   let(:facade) { instance_spy(CastleDevise::SdkFacade) }

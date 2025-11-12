@@ -73,17 +73,17 @@ module CastleDevise
       return if context.castle_id.blank? && context.email.blank?
 
       user = if context.castle_id
-        {
-          id: context.castle_id,
-          email: context.email,
-          registered_at: format_time(context.registered_at),
-          traits: context.user_traits
-        }
-      else
-        {
-          email: context.email
-        }
-      end
+               {
+                 id: context.castle_id,
+                 email: context.email,
+                 registered_at: format_time(context.registered_at),
+                 traits: context.user_traits
+               }
+             else
+               {
+                 email: context.email
+               }
+             end
 
       payload = {
         event: event,

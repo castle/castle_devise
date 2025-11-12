@@ -3,15 +3,15 @@
 RSpec.describe "Profile update", type: :request do
   subject(:send_profile_update) do
     put "/users",
-      params: {
-        email: email,
-        user: {
-          current_password: current_password,
-          password: new_password,
-          password_confirmation: new_password
-        },
-        castle_request_token: request_token
-      }
+        params: {
+          email: email,
+          user: {
+            current_password: current_password,
+            password: new_password,
+            password_confirmation: new_password
+          },
+          castle_request_token: request_token
+        }
   end
 
   let(:facade) { instance_spy(CastleDevise::SdkFacade) }

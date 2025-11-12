@@ -17,10 +17,10 @@ RSpec.describe "Logging in", type: :request do
   # @param request_token [String]
   def send_sign_in_request(email, password, request_token)
     post "/users/sign_in",
-      params: {
-        user: {email: email, password: password},
-        castle_request_token: request_token
-      }
+         params: {
+           user: { email: email, password: password },
+           castle_request_token: request_token
+         }
   end
 
   def send_authenticated_request

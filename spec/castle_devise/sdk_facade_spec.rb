@@ -5,7 +5,7 @@ RSpec.describe CastleDevise::SdkFacade do
 
   let(:user_email) { "user@example.com" }
   let(:user_password) { "password" }
-  let(:user_rack_params) { {"email" => user_email, "password" => user_password} }
+  let(:user_rack_params) { { "email" => user_email, "password" => user_password } }
   let(:rack_params) do
     {
       "user" => user_rack_params,

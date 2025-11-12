@@ -5,10 +5,10 @@ RSpec.describe "Registration attempt", type: :request do
 
   def send_registration_request
     post "/users",
-      params: {
-        user: {email: "user@example.com", password: "123456", password_confirmation: "123456"},
-        castle_request_token: "token123"
-      }
+         params: {
+           user: { email: "user@example.com", password: "123456", password_confirmation: "123456" },
+           castle_request_token: "token123"
+         }
   end
 
   before do

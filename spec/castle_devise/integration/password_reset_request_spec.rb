@@ -2,7 +2,7 @@
 
 RSpec.describe "Password reset request", type: :request do
   subject(:send_password_reset_request) do
-    post "/users/password", params: {user: {email: email}}
+    post "/users/password", params: { user: { email: email } }
   end
 
   let(:facade) { instance_double(CastleDevise::SdkFacade) }
