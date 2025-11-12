@@ -2,6 +2,9 @@
 
 ## [Unreleased][main]
 
+## [0.6.0] - 2025-01-XX
+- Add Rails 8.1 support
+
 ## [0.5.0] - 2025-06-17
 - Throw a warning instead of an error for the `$login.failed` event when an exception is raised
 - Security fixes and dependency updates
@@ -33,7 +36,8 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.5.0...HEAD
+[main]: https://github.com/castle/castle_devise/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/castle/castle_devise/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/castle/castle_devise/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/castle/castle_devise/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/castle/castle_devise/compare/v0.4.1...v0.4.2
