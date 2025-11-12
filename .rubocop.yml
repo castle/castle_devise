@@ -124,6 +124,12 @@ RSpec/ContextWording:
 RSpec/NoExpectationExample:
   Enabled: false
 
+RSpec/IncludeExamples:
+  Enabled: false
+
+RSpec/SharedExamples:
+  Enabled: false
+
 # Performance preferences
 Performance/CollectionLiteralInLoop:
   Enabled: true

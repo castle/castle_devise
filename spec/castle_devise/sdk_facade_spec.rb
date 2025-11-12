@@ -54,7 +54,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#filter" do
     let(:event) { "$login" }
 
-    it_behaves_like "calls before- and after- hooks", :filter do
+    include_examples "calls before- and after- hooks", :filter do
       before do
         facade.filter(event: event, context: context)
       end
@@ -91,7 +91,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#risk" do
     let(:event) { "$login" }
 
-    it_behaves_like "calls before- and after- hooks", :risk do
+    include_examples "calls before- and after- hooks", :risk do
       before do
         facade.risk(event: event, context: context)
       end
@@ -101,7 +101,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#log" do
     let(:event) { "$login" }
 
-    it_behaves_like "calls before- and after- hooks", :log do
+    include_examples "calls before- and after- hooks", :log do
       before do
         facade.log(event: event, status: "$failed", context: context)
       end
