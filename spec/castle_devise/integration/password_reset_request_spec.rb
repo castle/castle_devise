@@ -37,7 +37,7 @@ RSpec.describe "Password reset request", type: :request do
       end
 
       it "does not set reset_password_sent_at on user" do
-        expect(user.reset_password_sent_at).to eq(nil)
+        expect(user.reset_password_sent_at).to be_nil
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe "Password reset request", type: :request do
       end
 
       it "does not set reset_password_sent_at on user" do
-        expect(user.reset_password_sent_at).to eq(nil)
+        expect(user.reset_password_sent_at).to be_nil
       end
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe "Password reset request", type: :request do
       end
 
       it "sets reset_password_sent_at on user" do
-        expect(user.reload.reset_password_sent_at).to eq(nil)
+        expect(user.reload.reset_password_sent_at).to be_nil
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe "Password reset request", type: :request do
       end
 
       it "sets reset_password_sent_at on user" do
-        expect(user.reload.reset_password_sent_at).not_to eq(nil)
+        expect(user.reload.reset_password_sent_at).not_to be_nil
       end
     end
 
@@ -107,7 +107,7 @@ RSpec.describe "Password reset request", type: :request do
       end
 
       it "sets reset_password_sent_at on user" do
-        expect(user.reload.reset_password_sent_at).not_to eq(nil)
+        expect(user.reload.reset_password_sent_at).not_to be_nil
       end
     end
   end

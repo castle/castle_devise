@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe CastleDevise::SdkFacade do
-  subject(:facade) { CastleDevise::SdkFacade.new(castle, before_hooks, after_hooks) }
+  subject(:facade) { described_class.new(castle, before_hooks, after_hooks) }
 
   let(:user_email) { "user@example.com" }
   let(:user_password) { "password" }
@@ -54,7 +54,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#filter" do
     let(:event) { "$login" }
 
-    include_examples "calls before- and after- hooks", :filter do
+    it_behaves_like "calls before- and after- hooks", :filter do
       before do
         facade.filter(event: event, context: context)
       end
@@ -91,7 +91,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#risk" do
     let(:event) { "$login" }
 
-    include_examples "calls before- and after- hooks", :risk do
+    it_behaves_like "calls before- and after- hooks", :risk do
       before do
         facade.risk(event: event, context: context)
       end
@@ -101,7 +101,7 @@ RSpec.describe CastleDevise::SdkFacade do
   describe "#log" do
     let(:event) { "$login" }
 
-    include_examples "calls before- and after- hooks", :log do
+    it_behaves_like "calls before- and after- hooks", :log do
       before do
         facade.log(event: event, status: "$failed", context: context)
       end

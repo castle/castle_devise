@@ -52,7 +52,7 @@ RSpec.describe "Password reset", type: :request do
     end
 
     it "updates the password" do
-      expect(user.reload.valid_password?(new_password)).to eq(true)
+      expect(user.reload.valid_password?(new_password)).to be(true)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe "Password reset", type: :request do
 
     context "when password successfully changed" do
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
 
       it "logs profile_update event with succeeded status" do
@@ -81,7 +81,7 @@ RSpec.describe "Password reset", type: :request do
       let(:new_password_confirmation) { "abcdef" }
 
       it "does not update the password" do
-        expect(user.reload.valid_password?(password)).to eq(true)
+        expect(user.reload.valid_password?(password)).to be(true)
       end
 
       it "logs profile_update event with failed status" do
@@ -97,7 +97,7 @@ RSpec.describe "Password reset", type: :request do
       let(:reset_password_token) { "fake_reset_password_token" }
 
       it "does not update the password" do
-        expect(user.reload.valid_password?(password)).to eq(true)
+        expect(user.reload.valid_password?(password)).to be(true)
       end
 
       it "logs profile_update event with failed status" do
@@ -127,7 +127,7 @@ RSpec.describe "Password reset", type: :request do
       end
 
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
     end
   end

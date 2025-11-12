@@ -11,7 +11,7 @@ require "castle_devise"
 
 require "webmock/rspec"
 
-Dir[File.expand_path("support/**/*.rb", __dir__)].sort.each { |f| require f }
+Dir[File.expand_path("support/**/*.rb", __dir__)].each { |f| require f }
 
 Rails.backtrace_cleaner.remove_silencers!
 

@@ -63,7 +63,7 @@ RSpec.describe "Profile update", type: :request do
     end
 
     it "updates the password" do
-      expect(user.reload.valid_password?(new_password)).to eq(true)
+      expect(user.reload.valid_password?(new_password)).to be(true)
     end
   end
 
@@ -78,7 +78,7 @@ RSpec.describe "Profile update", type: :request do
 
     context "when password successfully changed" do
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
 
       it "performs risk action with profile_update event" do
@@ -102,7 +102,7 @@ RSpec.describe "Profile update", type: :request do
       let(:current_password) { "abcdef" }
 
       it "does not update the password" do
-        expect(user.reload.valid_password?(password)).to eq(true)
+        expect(user.reload.valid_password?(password)).to be(true)
       end
 
       it "performs risk action with profile_update event" do
@@ -142,7 +142,7 @@ RSpec.describe "Profile update", type: :request do
       end
 
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
     end
 
@@ -164,7 +164,7 @@ RSpec.describe "Profile update", type: :request do
       end
 
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
     end
 
@@ -186,7 +186,7 @@ RSpec.describe "Profile update", type: :request do
       end
 
       it "updates the password" do
-        expect(user.reload.valid_password?(new_password)).to eq(true)
+        expect(user.reload.valid_password?(new_password)).to be(true)
       end
     end
   end

@@ -46,7 +46,7 @@ module CastleDevise
 
     def initialize
       @monitoring_mode = false
-      @logger = Logger.new("/dev/null")
+      @logger = Logger.new(File::NULL)
       @before_request_hooks = []
       @after_request_hooks = []
       @castle_sdk_facade_class = ::CastleDevise::SdkFacade
