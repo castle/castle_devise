@@ -71,7 +71,7 @@ require_relative "castle_devise/rails"
 module Devise
   # Configures which events trigger Castle API calls
   mattr_accessor :castle_hooks
-  @@castle_hooks = {
+  self.castle_hooks = {
     before_registration: true,
     after_login: true,
     after_password_reset_request: true,

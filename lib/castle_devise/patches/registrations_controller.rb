@@ -80,8 +80,6 @@ module CastleDevise
           flash.alert = "Account cannot be created at this moment. Please try again later."
           redirect_to new_session_path(resource_name)
           false
-        else
-          # everything fine, continue
         end
       rescue Castle::InvalidParametersError
         # log error and allow
