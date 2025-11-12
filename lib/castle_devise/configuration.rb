@@ -1,20 +1,17 @@
 # frozen_string_literal: true
 
-require "active_support/configurable"
 require "logger"
 
 module CastleDevise
-  # Configuration object using {ActiveSupport::Configurable}
+  # Configuration object
   class Configuration
-    include ActiveSupport::Configurable
-
     # @!attribute api_secret
     #   @return [String] Your API secret
-    config_accessor(:api_secret)
+    attr_accessor :api_secret
 
     # @!attribute app_id
     #   @return [String] Your Castle App ID
-    config_accessor(:app_id)
+    attr_accessor :app_id
 
     # @!attribute monitoring_mode
     #   When CastleDevise is in monitoring mode, it sends requests to Castle
@@ -25,27 +22,36 @@ module CastleDevise
     #   from logging in/registering.
     #
     #   @return [true, false] whether to act on deny requests or not
-    config_accessor(:monitoring_mode) { false }
+    attr_accessor :monitoring_mode
 
     # @!attribute logger
     #   @return [Logger] A Logger instance. You might want to use Rails.logger here.
-    config_accessor(:logger) { Logger.new("/dev/null") }
+    attr_accessor :logger
 
     # @!attribute before_request_hooks
     #   @return [Array<Proc>] Array of procs that will get called before a request to the Castle API
-    config_accessor(:before_request_hooks) { [] }
+    attr_accessor :before_request_hooks
 
     # @!attribute after_request_hooks
     #   @return [Array<Proc>] Array of procs that will get called after a request to the Castle API
-    config_accessor(:after_request_hooks) { [] }
+    attr_accessor :after_request_hooks
 
     # @!attribute castle_sdk_facade_class
     #   @return [Class] Castle API implementation
-    config_accessor(:castle_sdk_facade_class) { ::CastleDevise::SdkFacade }
+    attr_accessor :castle_sdk_facade_class
 
     # @!attribute castle_client
     #   @return [Class] Castle SDK client
-    config_accessor(:castle_client) { ::Castle::Client.new }
+    attr_accessor :castle_client
+
+    def initialize
+      @monitoring_mode = false
+      @logger = Logger.new("/dev/null")
+      @before_request_hooks = []
+      @after_request_hooks = []
+      @castle_sdk_facade_class = ::CastleDevise::SdkFacade
+      @castle_client = ::Castle::Client.new
+    end
 
     # Adds a new before_request hook
     # @param blk [Proc]
