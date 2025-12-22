@@ -12,23 +12,15 @@ jobs:
       matrix:
         include:
           # Rails 6.0
-          - ruby: "3.1"
-            rails: "6.0"
           - ruby: "3.2"
             rails: "6.0"
           # Rails 6.1
-          - ruby: "3.1"
-            rails: "6.1"
           - ruby: "3.2"
             rails: "6.1"
           # Rails 7.0
-          - ruby: "3.1"
-            rails: "7.0"
           - ruby: "3.2"
             rails: "7.0"
           # Rails 7.1
-          - ruby: "3.1"
-            rails: "7.1"
           - ruby: "3.2"
             rails: "7.1"
           - ruby: "3.3"
