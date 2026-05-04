@@ -12,23 +12,15 @@ jobs:
       matrix:
         include:
           # Rails 6.0
-          - ruby: "3.1"
-            rails: "6.0"
           - ruby: "3.2"
             rails: "6.0"
           # Rails 6.1
-          - ruby: "3.1"
-            rails: "6.1"
           - ruby: "3.2"
             rails: "6.1"
           # Rails 7.0
-          - ruby: "3.1"
-            rails: "7.0"
           - ruby: "3.2"
             rails: "7.0"
           # Rails 7.1
-          - ruby: "3.1"
-            rails: "7.1"
           - ruby: "3.2"
             rails: "7.1"
           - ruby: "3.3"
@@ -43,6 +35,11 @@ jobs:
             rails: "8.0"
           - ruby: "3.4"
             rails: "8.0"
+          # Rails 8.1
+          - ruby: "3.3"
+            rails: "8.1"
+          - ruby: "3.4"
+            rails: "8.1"
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby ${{ matrix.ruby }}
@@ -63,6 +60,6 @@ jobs:
           bundle exec rake
       - name: Simplecov Report
         uses: k1LoW/octocov-action@v1
-        if: matrix.ruby == '3.4' && matrix.rails == '8.0'
+        if: matrix.ruby == '3.4' && matrix.rails == '8.1'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

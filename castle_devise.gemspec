@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Integrates Castle with Devise"
   spec.description = "castle_devise provides out-of-the-box protection against bot registrations and account takeover attacks."
   spec.homepage = "https://github.com/castle/castle_devise"
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.0")
 
   spec.authors = ["Kacper Madej", "Dawid Libiszewski", "Bartosz Knapik", "Johan Brissmyr"]
   spec.email = ["team@castle.io"]
