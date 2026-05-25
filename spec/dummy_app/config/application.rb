@@ -6,8 +6,9 @@ Bundler.require(*Rails.groups)
 
 module DummyApp
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    # Load defaults for the Rails version we're running against. This keeps the dummy
+    # app exercising each appraisal gemfile against that Rails version's own defaults.
+    config.load_defaults Rails::VERSION::STRING.to_f
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
