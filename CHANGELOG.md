@@ -2,6 +2,15 @@
 
 ## [Unreleased][main]
 
+## [0.6.0] - 2026-05-25
+- Add support for Rails 8.1
+- Add support for Devise 5
+- Add Ruby 3.3, 3.4, and 4.0 to the CI matrix
+- Bump minimum required Ruby version to 3.2
+- Replace deprecated `ActiveSupport::Configurable` with plain Ruby attribute accessors (drops the Rails 8.2 deprecation warning)
+- Drop `appraisal` development dependency in favor of hand-maintained `gemfiles/*.gemfile`
+- Bump development Gemfile to Rails 8.1, Devise 5, sqlite3 ~> 2.1, Bundler 2.7.x
+
 ## [0.5.0] - 2025-06-17
 - Throw a warning instead of an error for the `$login.failed` event when an exception is raised
 - Security fixes and dependency updates
@@ -33,7 +42,8 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.5.0...HEAD
+[main]: https://github.com/castle/castle_devise/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/castle/castle_devise/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/castle/castle_devise/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/castle/castle_devise/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/castle/castle_devise/compare/v0.4.1...v0.4.2

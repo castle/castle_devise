@@ -129,7 +129,7 @@ RSpec.describe "Profile update", type: :request do
         call_risk_count = 0
         allow(facade).to receive(:risk) do
           call_risk_count += 1
-          call_risk_count >= 2 ? raise(Castle::InvalidParametersError) : login_castle_risk_response
+          (call_risk_count >= 2) ? raise(Castle::InvalidParametersError) : login_castle_risk_response
         end
 
         allow(CastleDevise.logger).to receive(:warn)
@@ -151,7 +151,7 @@ RSpec.describe "Profile update", type: :request do
         call_risk_count = 0
         allow(facade).to receive(:risk) do
           call_risk_count += 1
-          call_risk_count >= 2 ? raise(Castle::Error) : login_castle_risk_response
+          (call_risk_count >= 2) ? raise(Castle::Error) : login_castle_risk_response
         end
 
         allow(CastleDevise.logger).to receive(:error)
