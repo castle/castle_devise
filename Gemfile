@@ -7,6 +7,8 @@ gemspec
 
 gem "actionmailer"
 gem "activerecord"
+# Dev/test: track castle-rb upstream develop. Gemspec uses rubygems.
+gem "castle-rb", github: "castle/castle-ruby", branch: "develop"
 gem "byebug"
 gem "devise", "~> 5.0"
 gem "railties", "~> 8.1"
