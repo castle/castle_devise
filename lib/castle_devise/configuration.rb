@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "active_support/configurable"
 require "logger"
 
 module CastleDevise
-  # Configuration object using {ActiveSupport::Configurable}
+  # Plain Ruby configuration object for CastleDevise.
+  #
+  # Previously this used +ActiveSupport::Configurable+, which is deprecated
+  # and slated for removal in Rails 8.2.
   class Configuration
-    include ActiveSupport::Configurable
-
     # @!attribute api_secret
     #   @return [String] Your API secret
-    config_accessor(:api_secret)
+    attr_accessor :api_secret
 
     # @!attribute app_id
     #   @return [String] Your Castle App ID
-    config_accessor(:app_id)
+    attr_accessor :app_id
 
     # @!attribute monitoring_mode
     #   When CastleDevise is in monitoring mode, it sends requests to Castle
@@ -25,27 +25,41 @@ module CastleDevise
     #   from logging in/registering.
     #
     #   @return [true, false] whether to act on deny requests or not
-    config_accessor(:monitoring_mode) { false }
-
-    # @!attribute logger
-    #   @return [Logger] A Logger instance. You might want to use Rails.logger here.
-    config_accessor(:logger) { Logger.new("/dev/null") }
+    attr_accessor :monitoring_mode
 
     # @!attribute before_request_hooks
     #   @return [Array<Proc>] Array of procs that will get called before a request to the Castle API
-    config_accessor(:before_request_hooks) { [] }
+    attr_accessor :before_request_hooks
 
     # @!attribute after_request_hooks
     #   @return [Array<Proc>] Array of procs that will get called after a request to the Castle API
-    config_accessor(:after_request_hooks) { [] }
+    attr_accessor :after_request_hooks
+
+    attr_writer :logger, :castle_sdk_facade_class, :castle_client
+
+    def initialize
+      @monitoring_mode = false
+      @before_request_hooks = []
+      @after_request_hooks = []
+    end
+
+    # @!attribute logger
+    #   @return [Logger] A Logger instance. You might want to use Rails.logger here.
+    def logger
+      @logger ||= Logger.new(File::NULL)
+    end
 
     # @!attribute castle_sdk_facade_class
     #   @return [Class] Castle API implementation
-    config_accessor(:castle_sdk_facade_class) { ::CastleDevise::SdkFacade }
+    def castle_sdk_facade_class
+      @castle_sdk_facade_class ||= ::CastleDevise::SdkFacade
+    end
 
     # @!attribute castle_client
-    #   @return [Class] Castle SDK client
-    config_accessor(:castle_client) { ::Castle::Client.new }
+    #   @return [Castle::Client] Castle SDK client
+    def castle_client
+      @castle_client ||= ::Castle::Client.new
+    end
 
     # Adds a new before_request hook
     # @param blk [Proc]

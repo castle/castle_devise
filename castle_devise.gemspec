@@ -28,8 +28,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activesupport", ">= 6.0"
-  spec.add_dependency "castle-rb", ">= 7.2", "< 9.0"
-  spec.add_dependency "devise", ">= 4.3.0", "< 5.0"
-
-  spec.add_development_dependency "appraisal", "~> 2.5.0"
+  spec.add_dependency "castle-rb", ">= 7.2", "< 10.0"
+  spec.add_dependency "devise", ">= 4.3.0", "< 6.0"
 end

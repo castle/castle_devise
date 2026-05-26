@@ -35,10 +35,14 @@ jobs:
             rails: "8.0"
           - ruby: "3.4"
             rails: "8.0"
+          - ruby: "4.0"
+            rails: "8.0"
           # Rails 8.1
           - ruby: "3.3"
             rails: "8.1"
           - ruby: "3.4"
+            rails: "8.1"
+          - ruby: "4.0"
             rails: "8.1"
     steps:
       - uses: actions/checkout@v4
