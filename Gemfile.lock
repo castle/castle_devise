@@ -3,7 +3,7 @@ PATH
   specs:
     castle_devise (0.6.0)
       activesupport (>= 6.0)
-      castle-rb (>= 7.2, < 9.0)
+      castle-rb (>= 7.2, < 10.0)
       devise (>= 4.3.0, < 6.0)
 
 GEM

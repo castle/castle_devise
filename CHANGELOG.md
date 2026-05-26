@@ -5,6 +5,11 @@
 ## [0.6.0] - 2026-05-25
 - Add support for Rails 8.1
 - Add support for Devise 5
+- Allow `castle-rb` 9.x (constraint widened to `>= 7.2, < 10.0`); verified
+  against the upcoming 9.0 release — castle_devise uses only the
+  `#risk` / `#filter` / `#log` Client APIs and the `Castle::Error` /
+  `InvalidParametersError` / `InvalidRequestTokenError` classes, all of
+  which remain in 9.0.
 - Add Ruby 3.3, 3.4, and 4.0 to the CI matrix
 - Bump minimum required Ruby version to 3.2
 - Replace deprecated `ActiveSupport::Configurable` with plain Ruby attribute accessors (drops the Rails 8.2 deprecation warning)
