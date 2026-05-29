@@ -10,6 +10,7 @@
   `#risk` / `#filter` / `#log` Client APIs and the `Castle::Error` /
   `InvalidParametersError` / `InvalidRequestTokenError` classes, all of
   which remain in 9.0.
+- Bump `castle-rb` to 9.1.0
 - Add Ruby 3.3, 3.4, and 4.0 to the CI matrix
 - Bump minimum required Ruby version to 3.2
 - Replace deprecated `ActiveSupport::Configurable` with plain Ruby attribute accessors (drops the Rails 8.2 deprecation warning)
