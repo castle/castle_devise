@@ -59,7 +59,6 @@ jobs:
       - name: Run specs
         env:
           BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
-          CASTLE_API_SECRET: ${{ secrets.CASTLE_API_SECRET }}
         run: |
           bundle exec rake
       - name: Simplecov Report
