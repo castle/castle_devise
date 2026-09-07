@@ -64,23 +64,7 @@ en:
 
 Install [`@castleio/castle-js`](https://docs.castle.io/docs/sdk-browser) (2.x or 3.x).
 
-**Script tag** (UMD). Serve `node_modules/@castleio/castle-js/dist` at `/vendor/castle-js`. `castle_javascript_tag` loads `castle.umd.js` and seeds `window.Castle` before the script runs (3.x UMD is named `@castleio/castle-js`):
-
-```
-npm install @castleio/castle-js
-```
-
-```ruby
-# config/routes.rb
-mount Rack::Files.new(Rails.root.join("node_modules/@castleio/castle-js/dist").to_s),
-      at: "/vendor/castle-js"
-```
-
-```ruby
-<%= castle_javascript_tag %>
-```
-
-**Module import** (3.x). Configure the SDK in your pack and keep the instance on `window.__castleDevise`:
+**Module import.** Configure the SDK in your pack and keep the instance on `window.__castleDevise`:
 
 ```javascript
 import * as Castle from '@castleio/castle-js'
@@ -90,6 +74,18 @@ window.__castleDevise = Castle.configure({ pk: YOUR_PUBLISHABLE_KEY })
 
 ```ruby
 <%= castle_javascript_tag(bundled: true) %>
+```
+
+**Script tag** (UMD). Copy the npm `dist` into `public/vendor/castle-js` so the UMD file and workers are deployed with the app. `castle_javascript_tag` loads `/vendor/castle-js/castle.umd.js` and seeds `window.Castle` (3.x UMD is named `@castleio/castle-js`):
+
+```
+npm install @castleio/castle-js
+mkdir -p public/vendor
+cp -R node_modules/@castleio/castle-js/dist public/vendor/castle-js
+```
+
+```ruby
+<%= castle_javascript_tag %>
 ```
 
 Add the following tag to the the `<form>` tag in both `devise/registrations/new.html.erb` and `devise/sessions/new.html.erb` (if you haven't generated them yet, run `rails generate devise:views`):
@@ -220,6 +216,7 @@ end
 ### Setup
 
 ```bash
+mise install
 bundle install
 ```
 
@@ -228,8 +225,10 @@ bundle install
 Most of the specs should pass just by running the following command:
 
 ```bash
-bundle exec rake
+mise run test
 ```
+
+or `bundle exec rake`.
 
 We also have a few VCR tests that will periodically rebuild the cassettes just to make sure that the integration with Castle API is working.
 For those, you need to run your specs with a proper Castle API Secret:
