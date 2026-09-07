@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    castle_devise (0.6.1)
+    castle_devise (0.7.0)
       activesupport (>= 6.0)
       castle-rb (>= 7.2, < 10.0)
       devise (>= 4.3.0, < 6.0)

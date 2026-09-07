@@ -2,7 +2,7 @@
 
 ## [Unreleased][main]
 
-## [0.6.1] - 2026-09-07
+## [0.7.0] - 2026-09-07
 - Bump development Gemfile.lock dependencies, including Rails 8.1.3.1, `castle-rb` 9.3.0, Standard 1.56, and SimpleCov 1.2
 - Pin Ruby 3.4.10 via `.tool-versions` and add `mise.toml` task aliases
 - Use `actions/checkout@v5` in CI
@@ -53,8 +53,8 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.6.1...HEAD
-[0.6.1]: https://github.com/castle/castle_devise/compare/v0.6.0...v0.6.1
+[main]: https://github.com/castle/castle_devise/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/castle/castle_devise/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/castle/castle_devise/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/castle/castle_devise/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/castle/castle_devise/compare/v0.4.2...v0.4.3
