@@ -5,7 +5,7 @@
 - Load the Castle browser SDK UMD from `/vendor/castle-js/castle.umd.js` instead of `cdn.castle.io`
 - Seed `window.Castle` before the UMD script so 3.x (`name: @castleio/castle-js`) attaches to the same global
 - Support `@castleio/castle-js` 2.x (`injectTokenOnSubmit` / `createRequestToken`) and 3.x (`configure({ pk })` + `createRequestToken`)
-- Add `publishable_key` configuration; `app_id` remains a fallback for the browser SDK key
+- Add `publishable_key` configuration and drop `app_id`
 
 ## [0.6.0] - 2026-05-25
 - Add support for Rails 8.1

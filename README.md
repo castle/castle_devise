@@ -26,7 +26,6 @@ Create `config/initializers/castle_devise.rb` and fill in your API secret and pu
 CastleDevise.configure do |config|
   config.api_secret = ENV.fetch('CASTLE_API_SECRET')
   config.publishable_key = ENV.fetch('CASTLE_PK')
-  # config.app_id is still accepted as a fallback for the browser SDK key.
 
   # When monitoring mode is enabled, CastleDevise sends
   # requests to Castle but it doesn't act on the "deny" verdicts.

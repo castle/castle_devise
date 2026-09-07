@@ -3,13 +3,11 @@
 RSpec.describe CastleDevise::Helpers::CastleHelper, type: :helper do
   describe "#castle_javascript_tag" do
     before do
-      CastleDevise.configuration.app_id = "app_from_id"
-      CastleDevise.configuration.publishable_key = nil
+      CastleDevise.configuration.publishable_key = "pk_test"
     end
 
     after do
-      CastleDevise.configuration.app_id = "123456789"
-      CastleDevise.configuration.publishable_key = nil
+      CastleDevise.configuration.publishable_key = "pk_spec"
     end
 
     it "loads castle-js UMD from /vendor/castle-js and configures it with pk" do
@@ -21,19 +19,10 @@ RSpec.describe CastleDevise::Helpers::CastleHelper, type: :helper do
       expect(html).to include("@castleio/castle-js")
       expect(html).to include(".configure")
       expect(html).to include("pk")
-      expect(html).to include("app_from_id")
+      expect(html).to include("pk_test")
       expect(html).to include("castleDeviseOnFormSubmit")
       expect(html).not_to include("castle.browser.js")
       expect(html).not_to include("cdn.castle.io")
-    end
-
-    it "prefers publishable_key over app_id" do
-      CastleDevise.configuration.publishable_key = "pk_test"
-
-      html = helper.castle_javascript_tag
-
-      expect(html).to include("pk_test")
-      expect(html).not_to include("app_from_id")
     end
 
     it "omits the script tag when the SDK is already bundled" do

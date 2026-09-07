@@ -56,7 +56,7 @@ module CastleDevise
       private
 
       def castle_js_bootstrap
-        BOOTSTRAP_JS.sub("__CASTLE_DEVISE_PK__", CastleDevise.configuration.castle_js_pk.to_json)
+        BOOTSTRAP_JS.sub("__CASTLE_DEVISE_PK__", CastleDevise.configuration.publishable_key.to_json)
       end
     end
   end
