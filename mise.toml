@@ -1,0 +1,11 @@
+[tasks.install]
+description = "Install Ruby gems"
+run = "bundle install"
+
+[tasks.test]
+description = "Run the RSpec suite"
+run = "bundle exec rspec"
+
+[tasks.lint]
+description = "Run Standard Ruby"
+run = "bundle exec standardrb"
