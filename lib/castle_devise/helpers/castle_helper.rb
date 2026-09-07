@@ -14,8 +14,10 @@ module CastleDevise
         }
       JS
 
-      # Configures the Castle browser SDK with { pk: }. Pass src: to also load a
-      # hosted UMD build; omit it when the host app already imported the npm module.
+      DEFAULT_UMD_SRC = "/vendor/castle-js/castle.umd.js"
+
+      # Loads castle.umd.js and configures it with { pk: }. Pass src: to use a
+      # different UMD URL, or src: nil when the host app already loaded the SDK.
       #
       # @param src [String, nil] URL or path of castle.umd.js (keep workers in the same directory)
       # @return [String]
@@ -29,7 +31,7 @@ module CastleDevise
       #   <title>Your app title</title>
       #
       #   <!-- the rest of your layout -->
-      def castle_javascript_tag(src: nil)
+      def castle_javascript_tag(src: DEFAULT_UMD_SRC)
         parts = []
         if src
           parts << javascript_tag(UMD_SHIM)

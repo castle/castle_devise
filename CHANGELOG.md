@@ -2,7 +2,7 @@
 
 ## [Unreleased][main]
 
-- Drop `cdn.castle.io`; configure the browser SDK from a host-imported module or a hosted UMD via `castle_javascript_tag(src:)`
+- Drop `cdn.castle.io`; load `castle.umd.js` from `/vendor/castle-js` via `castle_javascript_tag`
 - Seed `window.Castle` before a UMD script so 3.x (`name: @castleio/castle-js`) attaches to the same global
 - Support `@castleio/castle-js` 2.x (`injectTokenOnSubmit` / `createRequestToken`) and 3.x (`configure({ pk })` + `createRequestToken`)
 - Add `publishable_key` configuration and drop `app_id`
