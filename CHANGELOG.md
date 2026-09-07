@@ -2,10 +2,14 @@
 
 ## [Unreleased][main]
 
+## [0.7.0] - 2026-09-07
 - Drop `cdn.castle.io`; load `castle.umd.js` from `/vendor/castle-js` via `castle_javascript_tag`
 - Seed `window.Castle` before a UMD script so 3.x (`name: @castleio/castle-js`) attaches to the same global
 - Support `@castleio/castle-js` 2.x (`injectTokenOnSubmit` / `createRequestToken`) and 3.x (`configure({ pk })` + `createRequestToken`)
 - Add `publishable_key` configuration and drop `app_id`
+- Bump development Gemfile.lock dependencies, including Rails 8.1.3.1, `castle-rb` 9.3.0, Standard 1.56, and SimpleCov 1.2
+- Pin Ruby 3.4.10 via `.tool-versions` and add `mise.toml` task aliases
+- Use `actions/checkout@v5` in CI
 
 ## [0.6.0] - 2026-05-25
 - Add support for Rails 8.1
@@ -53,7 +57,8 @@
 
 - Initial release
 
-[main]: https://github.com/castle/castle_devise/compare/v0.6.0...HEAD
+[main]: https://github.com/castle/castle_devise/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/castle/castle_devise/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/castle/castle_devise/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/castle/castle_devise/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/castle/castle_devise/compare/v0.4.2...v0.4.3
