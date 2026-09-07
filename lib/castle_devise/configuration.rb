@@ -12,9 +12,9 @@ module CastleDevise
     #   @return [String] Your API secret
     attr_accessor :api_secret
 
-    # @!attribute app_id
-    #   @return [String] Your Castle App ID
-    attr_accessor :app_id
+    # @!attribute publishable_key
+    #   @return [String] Publishable key passed to @castleio/castle-js as { pk: }
+    attr_accessor :publishable_key
 
     # @!attribute monitoring_mode
     #   When CastleDevise is in monitoring mode, it sends requests to Castle
