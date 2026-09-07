@@ -16,4 +16,19 @@ RSpec.describe CastleDevise::Configuration do
 
     expect(configuration.after_request_hooks.size).to eq(2)
   end
+
+  describe "#castle_js_pk" do
+    it "returns publishable_key when present" do
+      configuration.publishable_key = "pk_x"
+      configuration.app_id = "app_y"
+
+      expect(configuration.castle_js_pk).to eq("pk_x")
+    end
+
+    it "falls back to app_id" do
+      configuration.app_id = "app_y"
+
+      expect(configuration.castle_js_pk).to eq("app_y")
+    end
+  end
 end

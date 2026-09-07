@@ -4,13 +4,13 @@ module CastleDevise
   module Helpers
     # Methods defined here will be available in all your views.
     module CastleHelper
-      # Creates a <script> tag that includes our c.js script from a CDN.
-      # You have to make sure that your app_id is valid, otherwise the script won't work.
+      BOOTSTRAP_JS = File.read(File.expand_path("castle_devise.js", __dir__)).freeze
+
+      # Loads @castleio/castle-js from /vendor/castle-js and configures it with { pk: }.
+      # Pass bundled: true when the host app already imported the npm module.
       #
-      # You shouldn't call this method if you bundle our c.js script with your other
-      # JS packages.
-      #
-      # You should put this in the <head> section of your page:
+      # @param bundled [Boolean]
+      # @return [String]
       #
       # @example
       #   # app/views/layouts/application.html.erb
@@ -21,14 +21,15 @@ module CastleDevise
       #   <title>Your app title</title>
       #
       #   <!-- the rest of your layout -->
-      def castle_javascript_tag
-        javascript_include_tag(
-          "https://cdn.castle.io/v2/castle.js?#{CastleDevise.configuration.app_id}"
-        )
+      def castle_javascript_tag(bundled: false)
+        parts = []
+        parts << javascript_include_tag("/vendor/castle-js/castle.browser.js") unless bundled
+        parts << javascript_tag(castle_js_bootstrap)
+        safe_join(parts)
       end
 
-      # Puts an inline <script> tag that includes a "castle_devise_token" field
-      # within the current form.
+      # onsubmit handler that mints castle_request_token via 2.x injectTokenOnSubmit
+      # or 2.x/3.x createRequestToken.
       #
       # @example
       #   <%= form_for(resource, as: resource_name, url: sessions_path(resource_name), html: { onsubmit: castle_on_form_submit }) do |f| %>
@@ -38,7 +39,13 @@ module CastleDevise
       #
       # @return [String]
       def castle_on_form_submit
-        "typeof(_castle)=='undefined'?event.preventDefault():_castle('onFormSubmit', event)"
+        "castleDeviseOnFormSubmit(event)"
+      end
+
+      private
+
+      def castle_js_bootstrap
+        BOOTSTRAP_JS.sub("__CASTLE_DEVISE_PK__", CastleDevise.configuration.castle_js_pk.to_json)
       end
     end
   end

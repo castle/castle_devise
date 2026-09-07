@@ -2,6 +2,10 @@
 
 ## [Unreleased][main]
 
+- Load the Castle browser SDK from `/vendor/castle-js` (`@castleio/castle-js`) instead of `cdn.castle.io`
+- Support `@castleio/castle-js` 2.x (`injectTokenOnSubmit` / `createRequestToken`) and 3.x (module import + instance `createRequestToken`)
+- Add `publishable_key` configuration; `app_id` remains a fallback for the browser SDK key
+
 ## [0.6.0] - 2026-05-25
 - Add support for Rails 8.1
 - Add support for Devise 5

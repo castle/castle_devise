@@ -20,12 +20,13 @@ Include `castle_devise` in your Gemfile:
 gem 'castle_devise'
 ```
 
-Create `config/initializers/castle_devise.rb` and fill in your API secret and APP_ID from the [Castle Dashboard](https://dashboard.castle.io/settings/general)
+Create `config/initializers/castle_devise.rb` and fill in your API secret and publishable key from the [Castle Dashboard](https://dashboard.castle.io/settings/general)
 
 ```ruby
 CastleDevise.configure do |config|
   config.api_secret = ENV.fetch('CASTLE_API_SECRET')
-  config.app_id = ENV.fetch('CASTLE_APP_ID')
+  config.publishable_key = ENV.fetch('CASTLE_PK')
+  # config.app_id is still accepted as a fallback for the browser SDK key.
 
   # When monitoring mode is enabled, CastleDevise sends
   # requests to Castle but it doesn't act on the "deny" verdicts.
@@ -60,12 +61,36 @@ en:
 
 (See [devise.en.yml in our specs](spec/dummy_app/config/locales/devise.en.yml#L40))
 
-#### Further steps if you're not using Webpacker
+#### Browser SDK
 
-Include Castle's c.js script in the head section of your layout:
+Install [`@castleio/castle-js`](https://docs.castle.io/docs/sdk-browser) (2.x or 3.x).
+
+**Script tag** (2.x, or the 3.x `castle.browser.js` build). Serve `node_modules/@castleio/castle-js/dist` at `/vendor/castle-js`:
+
+```
+npm install @castleio/castle-js
+```
+
+```ruby
+# config/routes.rb
+mount Rack::Files.new(Rails.root.join("node_modules/@castleio/castle-js/dist").to_s),
+      at: "/vendor/castle-js"
+```
 
 ```ruby
 <%= castle_javascript_tag %>
+```
+
+**Module import** (3.x). Configure the SDK in your pack and keep the instance on `window.__castleDevise`:
+
+```javascript
+import * as Castle from '@castleio/castle-js'
+
+window.__castleDevise = Castle.configure({ pk: YOUR_PUBLISHABLE_KEY })
+```
+
+```ruby
+<%= castle_javascript_tag(bundled: true) %>
 ```
 
 Add the following tag to the the `<form>` tag in both `devise/registrations/new.html.erb` and `devise/sessions/new.html.erb` (if you haven't generated them yet, run `rails generate devise:views`):
@@ -76,26 +101,9 @@ Add the following tag to the the `<form>` tag in both `devise/registrations/new.
 <% end %>
 ```
 
+`castle_on_form_submit` uses 2.x `injectTokenOnSubmit` when present, and 2.x/3.x `createRequestToken` otherwise.
+
 You're set! Now verify that everything works by logging in to your application as any user. You should be able to see that User on the [Castle Users Page](https://dashboard.castle.io/users)
-
-
-#### Further steps if you're using Webpacker
-
-Add `@castleio/castle-js` to your package.json file:
-
-```
-yarn add @castleio/castle-js
-```
-
-configure castle in your application pack:
-
-```javascript
-import * as Castle from '@castleio/castle-js'
-
-Castle.configure(YOUR_APPLICATION_ID);
-```
-
-for advanced configuration follow [the readme](https://www.npmjs.com/package/@castleio/castle-js#configuration)
 
 ## How-Tos
 

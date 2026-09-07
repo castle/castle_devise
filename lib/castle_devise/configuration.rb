@@ -13,8 +13,12 @@ module CastleDevise
     attr_accessor :api_secret
 
     # @!attribute app_id
-    #   @return [String] Your Castle App ID
+    #   @return [String] Your Castle App ID. Used as a fallback publishable key for the browser SDK.
     attr_accessor :app_id
+
+    # @!attribute publishable_key
+    #   @return [String] Publishable key passed to @castleio/castle-js as { pk: }
+    attr_accessor :publishable_key
 
     # @!attribute monitoring_mode
     #   When CastleDevise is in monitoring mode, it sends requests to Castle
@@ -59,6 +63,15 @@ module CastleDevise
     #   @return [Castle::Client] Castle SDK client
     def castle_client
       @castle_client ||= ::Castle::Client.new
+    end
+
+    # The key Castle.configure receives as pk. An explicit publishable_key is used when set; otherwise app_id is sent.
+    # @return [String, nil]
+    def castle_js_pk
+      value = publishable_key
+      return value unless value.nil? || value.to_s.empty?
+
+      app_id
     end
 
     # Adds a new before_request hook
