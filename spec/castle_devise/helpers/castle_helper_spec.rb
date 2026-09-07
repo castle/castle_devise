@@ -10,26 +10,26 @@ RSpec.describe CastleDevise::Helpers::CastleHelper, type: :helper do
       CastleDevise.configuration.publishable_key = "pk_spec"
     end
 
-    it "loads castle-js UMD from /vendor/castle-js and configures it with pk" do
+    it "configures the SDK without loading a script when src is omitted" do
       html = helper.castle_javascript_tag
 
-      expect(html).to include("/vendor/castle-js/castle.umd.js")
-      expect(html).to include("window.module")
-      expect(html).to include("window.Castle")
-      expect(html).to include("@castleio/castle-js")
       expect(html).to include(".configure")
       expect(html).to include("pk")
       expect(html).to include("pk_test")
       expect(html).to include("castleDeviseOnFormSubmit")
-      expect(html).not_to include("castle.browser.js")
+      expect(html).not_to include("castle.umd.js")
       expect(html).not_to include("cdn.castle.io")
     end
 
-    it "omits the script tag when the SDK is already bundled" do
-      html = helper.castle_javascript_tag(bundled: true)
+    it "loads a hosted UMD build when src is given" do
+      html = helper.castle_javascript_tag(src: "/castle-js/castle.umd.js")
 
-      expect(html).not_to include("/vendor/castle-js/castle.umd.js")
-      expect(html).to include("castleDeviseOnFormSubmit")
+      expect(html).to include("/castle-js/castle.umd.js")
+      expect(html).to include("window.module")
+      expect(html).to include("window.Castle")
+      expect(html).to include("@castleio/castle-js")
+      expect(html).to include("pk_test")
+      expect(html).not_to include("cdn.castle.io")
     end
   end
 

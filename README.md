@@ -62,7 +62,7 @@ en:
 
 #### Browser SDK
 
-Install [`@castleio/castle-js`](https://docs.castle.io/docs/sdk-browser) (2.x or 3.x).
+Install [`@castleio/castle-js`](https://docs.castle.io/docs/sdk-browser) (2.x or 3.x). Host it the same way you host the rest of your JavaScript.
 
 **Module import.** Configure the SDK in your pack and keep the instance on `window.__castleDevise`:
 
@@ -73,20 +73,16 @@ window.__castleDevise = Castle.configure({ pk: YOUR_PUBLISHABLE_KEY })
 ```
 
 ```ruby
-<%= castle_javascript_tag(bundled: true) %>
-```
-
-**Script tag** (UMD). Copy the npm `dist` into `public/vendor/castle-js` so the UMD file and workers are deployed with the app. `castle_javascript_tag` loads `/vendor/castle-js/castle.umd.js` and seeds `window.Castle` (3.x UMD is named `@castleio/castle-js`):
-
-```
-npm install @castleio/castle-js
-mkdir -p public/vendor
-cp -R node_modules/@castleio/castle-js/dist public/vendor/castle-js
-```
-
-```ruby
 <%= castle_javascript_tag %>
 ```
+
+**Script tag** (UMD). Publish the npm `dist` directory with your static assets (for example `public/castle-js`, a CDN, or nginx). Keep `castle.umd.js` and the worker files in the same directory, then pass that URL:
+
+```ruby
+<%= castle_javascript_tag(src: "/castle-js/castle.umd.js") %>
+```
+
+`src` seeds `window.Castle` before the script runs (3.x UMD is named `@castleio/castle-js`).
 
 Add the following tag to the the `<form>` tag in both `devise/registrations/new.html.erb` and `devise/sessions/new.html.erb` (if you haven't generated them yet, run `rails generate devise:views`):
 

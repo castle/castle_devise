@@ -14,10 +14,10 @@ module CastleDevise
         }
       JS
 
-      # Loads @castleio/castle-js UMD from /vendor/castle-js and configures it with { pk: }.
-      # Pass bundled: true when the host app already imported the npm module.
+      # Configures the Castle browser SDK with { pk: }. Pass src: to also load a
+      # hosted UMD build; omit it when the host app already imported the npm module.
       #
-      # @param bundled [Boolean]
+      # @param src [String, nil] URL or path of castle.umd.js (keep workers in the same directory)
       # @return [String]
       #
       # @example
@@ -29,11 +29,11 @@ module CastleDevise
       #   <title>Your app title</title>
       #
       #   <!-- the rest of your layout -->
-      def castle_javascript_tag(bundled: false)
+      def castle_javascript_tag(src: nil)
         parts = []
-        unless bundled
+        if src
           parts << javascript_tag(UMD_SHIM)
-          parts << javascript_include_tag("/vendor/castle-js/castle.umd.js")
+          parts << javascript_include_tag(src)
         end
         parts << javascript_tag(castle_js_bootstrap)
         safe_join(parts)
