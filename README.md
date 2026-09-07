@@ -65,7 +65,7 @@ en:
 
 Install [`@castleio/castle-js`](https://docs.castle.io/docs/sdk-browser) (2.x or 3.x).
 
-**Script tag** (2.x, or the 3.x `castle.browser.js` build). Serve `node_modules/@castleio/castle-js/dist` at `/vendor/castle-js`:
+**Script tag** (UMD). Serve `node_modules/@castleio/castle-js/dist` at `/vendor/castle-js`. `castle_javascript_tag` loads `castle.umd.js` and seeds `window.Castle` before the script runs (3.x UMD is named `@castleio/castle-js`):
 
 ```
 npm install @castleio/castle-js

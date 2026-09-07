@@ -5,8 +5,16 @@ module CastleDevise
     # Methods defined here will be available in all your views.
     module CastleHelper
       BOOTSTRAP_JS = File.read(File.expand_path("castle_devise.js", __dir__)).freeze
+      # 3.x UMD is named @castleio/castle-js, so seed module.exports as window.Castle before the script tag.
+      UMD_SHIM = <<~JS
+        if (!window.Castle) {
+          window.exports = window.exports || {};
+          window.module = window.module || { exports: window.exports };
+          window.Castle = window.module.exports;
+        }
+      JS
 
-      # Loads @castleio/castle-js from /vendor/castle-js and configures it with { pk: }.
+      # Loads @castleio/castle-js UMD from /vendor/castle-js and configures it with { pk: }.
       # Pass bundled: true when the host app already imported the npm module.
       #
       # @param bundled [Boolean]
@@ -23,7 +31,10 @@ module CastleDevise
       #   <!-- the rest of your layout -->
       def castle_javascript_tag(bundled: false)
         parts = []
-        parts << javascript_include_tag("/vendor/castle-js/castle.browser.js") unless bundled
+        unless bundled
+          parts << javascript_tag(UMD_SHIM)
+          parts << javascript_include_tag("/vendor/castle-js/castle.umd.js")
+        end
         parts << javascript_tag(castle_js_bootstrap)
         safe_join(parts)
       end
