@@ -6,6 +6,6 @@ CastleDevise.configure do |config|
   # no real secret is needed, so a fixed dummy value keeps the specs valid
   # everywhere (including Dependabot runs that don't get repo secrets).
   config.api_secret = "fake-secret-123"
-  config.app_id = "123456789"
+  config.publishable_key = "pk_spec"
   config.logger = Logger.new($stdout)
 end
